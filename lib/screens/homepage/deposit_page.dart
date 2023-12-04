@@ -41,8 +41,8 @@ TextEditingController _controller = TextEditingController();
     final prefs = await SharedPreferences.getInstance();
     
       setState(() {
-      user_id = prefs.getString('user_id')!;
-      token = prefs.getString('token')!;
+      user_id = prefs.getString('user_id')?? '';
+      token = prefs.getString('token')?? '';
 
     });
   }

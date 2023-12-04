@@ -33,9 +33,9 @@ class _BottomNavBarState
     final prefs = await SharedPreferences.getInstance();
     
       setState(() {
-      username = prefs.getString('username')!;
-      user_id = prefs.getString('user_id')!;
-      token = prefs.getString('token')!;
+      username = prefs.getString('username')?? '';
+      user_id = prefs.getString('user_id')?? '';
+      token = prefs.getString('token')?? '';
     });
   }
   

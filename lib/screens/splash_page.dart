@@ -18,29 +18,30 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> 
+
  with SingleTickerProviderStateMixin {
-  String? token;
-  late Animation<double> opacity;
-  late AnimationController controller;
 
-  startSplashScreen() async {
-    var duration = const Duration(milliseconds: 2500);
-    return Timer(duration, () {
-      if (token != null) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => BottomNavBar()));
+    String? token;
+    late Animation<double> opacity;
+    late AnimationController controller;
 
-      } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
-      }
-    });
-  }
+    startSplashScreen(BuildContext context) async {
+      var duration = const Duration(milliseconds: 2500);
+      return Timer(duration, () {
+        if (token != null && token!.isNotEmpty) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => BottomNavBar()));
+        } else {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
+        }
+      });
+    }
 
     @override
     void initState() {
       super.initState();
       loadSharedPreference();
       getLoginState(context);
-      startSplashScreen();
+      startSplashScreen(context);
       controller = AnimationController(
           duration: const Duration(milliseconds: 2500), vsync: this);
       opacity = Tween<double>(begin: 1.0, end: 0.0).animate(controller)
