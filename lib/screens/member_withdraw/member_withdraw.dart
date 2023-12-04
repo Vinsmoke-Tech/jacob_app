@@ -199,7 +199,7 @@ TextEditingController saldoController = TextEditingController();
                         ),
                       ),
                     SizedBox(height: 16.h),
-                    
+
             Container(
                       padding: EdgeInsets.only(left: 16.w),
                       decoration: BoxDecoration(
@@ -255,6 +255,7 @@ TextEditingController saldoController = TextEditingController();
         setState(() {
           if (inputAmount > savingsAccountLastBalance) {
             savings_cash_mutation_amount = '';
+            _showDialog(context, 'Saldo tidak mencukupi');
           } else {
             savings_cash_mutation_amount = text;
           }
@@ -291,6 +292,7 @@ TextEditingController saldoController = TextEditingController();
             context,
             MaterialPageRoute(builder: (context) => WithdrawPage()), // Gantilah dengan nama halaman redirect yang sesuai
           );
+          
           // Navigator.pop(context);
       } 
     } on DioError catch (e) {
@@ -300,9 +302,16 @@ TextEditingController saldoController = TextEditingController();
         // ignore: unused_local_variable
         String errorMessage = e.response?.data['message'];
         
-      } else {
+        
+      }else if(e.response?.statusCode == 302 || e.response?.statusCode == 302) {
+        //gagal
+        // ignore: unused_local_variable
+        _showDialog(context, 'Saldo tidak mencukupi');
+        
+      }else{
         print(e);
         _showDialog(context, 'Terjadi kesalahan. Silakan coba lagi.');
+        
       }
     }
   }
@@ -312,7 +321,7 @@ TextEditingController saldoController = TextEditingController();
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Teks yang Dimasukkan'),
+          title: Text('Pesan'),
           content: Text(text),
           actions: <Widget>[
             TextButton(
