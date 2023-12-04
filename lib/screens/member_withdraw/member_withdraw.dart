@@ -199,57 +199,29 @@ TextEditingController saldoController = TextEditingController();
                         ),
                       ),
                     SizedBox(height: 16.h),
+                    
             Container(
-                        padding: EdgeInsets.only(left: 16.w),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25).r),
-                          color: Colors.grey[200],
-                        ),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          onChanged: (text) {
-                                savings_cash_mutation_amount = text;
-                              },
-                          readOnly: false,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: 'Jumlah (Rp)',
-                            labelStyle: TextStyle(
-                                color: myFocusNodeFive.hasFocus
-                                    ? Colors.black
-                                    : blue
-                                    
-                            ),
+                      padding: EdgeInsets.only(left: 16.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(25).r),
+                        color: Colors.grey[200],
+                      ),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        onChanged: (text) {
+                          checkAndSetMutationAmount(text);
+                        },
+                        readOnly: false,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Jumlah (Rp)',
+                          labelStyle: TextStyle(
+                            color: myFocusNodeFive.hasFocus ? Colors.black : blue,
                           ),
                         ),
                       ),
+                    ),
 
-            //         SizedBox(height: 16.h),
-            // Container(
-            //           padding: EdgeInsets.only(left: 16.w),
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.all(Radius.circular(25).r),
-            //             color: Colors.grey[200],
-            //           ),
-            //           child: TextFormField(
-            //           onChanged: (text) {
-            //                     savings_account_id = '1';
-            //                   },
-            //             readOnly: false,
-            //             maxLines: null, // Set to null for a multi-line input
-            //             keyboardType: TextInputType.multiline,
-            //             decoration: InputDecoration(
-            //               border: InputBorder.none,
-            //               labelText: 'Keterangan',
-            //               labelStyle: TextStyle(
-            //                 color: myFocusNodeFive.hasFocus
-            //                         ? Colors.black
-            //                         : blue
-            //               ),
-            //             ),
-            //           ),
-            //         ),
 
             SizedBox(height: 16.h),
             ElevatedButton(
@@ -273,6 +245,22 @@ TextEditingController saldoController = TextEditingController();
       ),
     );
   }
+
+    //logika pengurangan saldo
+    late double savingsAccountLastBalance = double.parse(widget.bySaving['savings_account_last_balance']);
+
+      void checkAndSetMutationAmount(String text) {
+        double inputAmount = double.tryParse(text) ?? 0.0;
+
+        setState(() {
+          if (inputAmount > savingsAccountLastBalance) {
+            savings_cash_mutation_amount = '';
+          } else {
+            savings_cash_mutation_amount = text;
+          }
+        });
+    }
+    //end
 
   Future postDataToServer(BuildContext context,String savings_account_id) async {
     final prefs = await SharedPreferences.getInstance();
@@ -298,6 +286,7 @@ TextEditingController saldoController = TextEditingController();
         // Successful response
 
          // Redirect to a new page
+        
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => WithdrawPage()), // Gantilah dengan nama halaman redirect yang sesuai

@@ -1,7 +1,7 @@
 class AppConstans {
   static const String APP_NAME = "JACOB";
   static const String APP_VERSION = "2.0.1";
-  static const String BASE_URL = "http://127.168.123.10:8000";
+  static const String BASE_URL = "http://192.168.1.10:8000";
 
   // company end points
   static const String PREFERENCE_COMPANY = "/api/preference-company";
