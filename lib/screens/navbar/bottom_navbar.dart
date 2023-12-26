@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jacob_app/screens/cashdeposit/cash_deposit.dart';
 import 'package:jacob_app/screens/cashwithdraw/cash_withdraw.dart';
 import 'package:jacob_app/screens/homepage/deposit_page.dart';
+import 'package:jacob_app/screens/homepage/installments_page.dart';
+import 'package:jacob_app/screens/homepage/mandatory_savings_page.dart';
 import 'package:jacob_app/screens/homepage/withdraw_page.dart';
-import 'package:jacob_app/screens/mandatorysavings/mandatory_savings.dart';
 import 'package:jacob_app/screens/profile/setting_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,8 +43,8 @@ class _BottomNavBarState
   final List<Widget> _screens = [
     HomePage(),
     WithdrawPage(),
-    const CashDeposit(),
-    const MandatorySavings(),
+    InstallmentsPage(),
+    MandatorySavingsPage(),
     const SettingPage(),
   ];
 
