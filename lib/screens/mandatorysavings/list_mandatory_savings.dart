@@ -3,18 +3,19 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jacob_app/screens/mandatorysavings/insert_mandatory_savings.dart';
 import 'package:jacob_app/screens/member_deposit/savings_by_member.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ListMandatory extends StatefulWidget {
+class ListMandatorySavings extends StatefulWidget {
 
   @override
-   State<ListMandatory> createState() => _ListMandatoryState();
+   State<ListMandatorySavings> createState() => _ListMandatorySavingsState();
 }
 
-class _ListMandatoryState extends State<ListMandatory> {
+class _ListMandatorySavingsState extends State<ListMandatorySavings> {
   String? membername;
   String? memberid;
 
@@ -202,9 +203,9 @@ class _ListMandatoryState extends State<ListMandatory> {
     );
   }
 
-void _onListTileTapped(Map<String, dynamic> byMember) {
+void _onListTileTapped(Map<String, dynamic> byMandatorySavings) {
   
-  String member_id = byMember['member_id'].toString();
+  String member_id = byMandatorySavings['member_id'].toString();
 
     setState(() {
       this.member_id = member_id;
@@ -213,7 +214,7 @@ void _onListTileTapped(Map<String, dynamic> byMember) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => SavingByMember(byMember: byMember, data: 'member_id'),
+      builder: (context) => MandatorySavings(byMandatorySavings: byMandatorySavings, data: 'member_id'),
     ),
   );
 }

@@ -22,7 +22,7 @@ class AppConstans {
   static const String INSERTSAVINGS = "/api/PostSavingsById/";
   static const String POSTMUTATION = "/api/PostSavingsmutation";
   static const String WITHDRAWMUTATION = "/api/GetWithdraw";
-  static const String MANDATORYSAVINGS = "/api/processAddMemberSavings";
+  static const String MANDATORYSAVINGS = "/api/processAddMemberSavings/";
 
 
 

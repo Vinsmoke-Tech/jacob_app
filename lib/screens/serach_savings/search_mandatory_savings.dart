@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jacob_app/screens/homepage/deposit_page.dart';
-import 'package:jacob_app/screens/mandatorysavings/list_mandatory.dart';
+import 'package:jacob_app/screens/mandatorysavings/list_mandatory_savings.dart';
 import 'package:jacob_app/screens/member_deposit/member_list.dart';
 import 'package:jacob_app/screens/serach_savings/list_savings.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
@@ -68,7 +68,7 @@ class _SearchMandatorySavingsState extends State<SearchMandatorySavings> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  ListMandatory()),
+                      MaterialPageRoute(builder: (context) =>  ListMandatorySavings()),
                     );
                   },
                   icon: const Icon(Icons.person_search, color: Colors.white),
