@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jacob_app/screens/serach_savings/search_installment.dart';
 import 'package:jacob_app/screens/serach_savings/search_savings_withdraw.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
@@ -201,7 +202,7 @@ TextEditingController _controller = TextEditingController();
     Route _animatedRoute() {
 
       return PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const SearchSavingsWithdraw(),
+        pageBuilder: (context, animation, secondaryAnimation) => const SearchInstallments(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
 
         const begin = Offset(0.0, 1.0);

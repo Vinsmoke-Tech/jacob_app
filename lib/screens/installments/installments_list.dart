@@ -3,26 +3,30 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jacob_app/screens/member_withdraw/withdraw_by_member.dart';
+import 'package:jacob_app/screens/installments/insert_installments.dart';
+import 'package:jacob_app/screens/member_deposit/savings_by_member.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MemberListWithdraw extends StatefulWidget {
+class InstallmentsList extends StatefulWidget {
+
   @override
-   State<MemberListWithdraw> createState() => _MemberListWithdrawState();
+   State<InstallmentsList> createState() => _InstallmentsListState();
 }
 
-class _MemberListWithdrawState extends State<MemberListWithdraw> {
-  String member_id ='';
-  String member_name = '';
-  String? memberid;
-  var memberidJson = [];
+class _InstallmentsListState extends State<InstallmentsList> {
   String? membername;
+  String? memberid;
+
   var membernameJson = [];
-  var savingsAccountId;
+  var memberidJson = [];
   String token = '';
   String user_id = '';
+  String member_name = '';
+  var savingsAccountId;
+  String member_id ='';
+
 
   @override
   void initState() {
@@ -44,7 +48,7 @@ class _MemberListWithdrawState extends State<MemberListWithdraw> {
       var dio = Dio();
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
-        AppConstans.BASE_URL+AppConstans.DATASAVINGS,
+        AppConstans.BASE_URL+AppConstans.GETDATACREDIT,
         data: {
           'token' : token,
           'member_id': member_id,
@@ -54,9 +58,10 @@ class _MemberListWithdrawState extends State<MemberListWithdraw> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         //berhasil
-          String member_name =json.encode(response.data['data']);
+        setState(() {
+          member_name =json.encode(response.data['data']);
           memberidJson = response.data['data'];
-          await prefs.setString('member_name', member_name);
+        });
         // print(memberidJson);
       }
     } on DioError catch (e) {
@@ -79,26 +84,6 @@ class _MemberListWithdrawState extends State<MemberListWithdraw> {
     }
   }
 
-    showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: Row(
-        children: [
-          const CircularProgressIndicator(),
-          Container(
-              margin: const EdgeInsets.only(left: 7),
-              child: const Text("Loading...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   void _onWidgetDidBuild(Function callback) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       callback();
@@ -109,7 +94,7 @@ class _MemberListWithdrawState extends State<MemberListWithdraw> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List of Members',style: TextStyle(color: white),),
+        title: const Text('Daftar Pinjaman',style: TextStyle(color: white),),
         backgroundColor: transparentBrown,
       ),
       body: RefreshIndicator(
@@ -142,12 +127,10 @@ class _MemberListWithdrawState extends State<MemberListWithdraw> {
                         children: <Widget>[
                           // Generated code for this ListTile Widget...
                           GestureDetector(
-                            // onTap: () {
-                            //   setState(() {
-                            //     item_category_id = itemCategoryJson[index]['item_category_id'];
-                            //   });
-                            //   fetchItem(context, item_category_id);
-                            // },
+                            onTap: () {
+                              // Aksi yang ingin Anda lakukan saat ListTile ditekan
+                              _onListTileTapped(memberidJson[index]);
+                            },
                             child: ListTile(
                               title: Text(
                                 (memberidJson[index]['member_no'].toString()),
@@ -200,4 +183,42 @@ class _MemberListWithdrawState extends State<MemberListWithdraw> {
 
     );
   }
+    showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: const Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+void _onListTileTapped(Map<String, dynamic> bySaving) {
+  
+  String member_id = bySaving['member_id'].toString();
+
+    setState(() {
+      this.member_id = member_id;
+    });
+    print(member_id);
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => InsertInstallments(bySaving: bySaving, data: 'member_id'),
+    ),
+  );
+
+}
+
+
 }

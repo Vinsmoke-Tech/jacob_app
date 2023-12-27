@@ -35,12 +35,24 @@ class _MandatorySavingsState extends State<MandatorySavings> {
   String savingsaccount ='';
   String memberid ='';
   late String member_id;
-  String member_mandatory_savings= '';
+  String member_mandatory_savings_last_balance= '';
   var memberidJson = [];
 
+  String total_amount= '0';
+  num member_mandatory_savings= 0;
+  num total = 0;
+  num subtotal = 0;
+  num saldoController = 0;
 
 
-TextEditingController saldoController = TextEditingController();
+
+
+
+
+TextEditingController _saldoController = TextEditingController(text: 0.toString());
+// TextEditingController outputController = TextEditingController();
+  TextEditingController outputController = TextEditingController();
+
     @override
   void initState() {
     super.initState();
@@ -60,8 +72,24 @@ TextEditingController saldoController = TextEditingController();
     0,
     initialValue: widget.byMandatorySavings['member_mandatory_savings'],
   );
-  saldoController.text = formattedSaldo;
+  _saldoController.text = formattedSaldo;
   }
+
+// Function to update the form field with the combined value
+  changeDiscountPercentage(var value) {
+    setState(() {
+      print(value);
+      if (value == '' || value == null) {
+        value = "0";
+      }
+      
+      _saldoController.text = saldoController.toString();
+
+      total = member_mandatory_savings + saldoController ;
+    });
+  }
+
+
 
 
   @override
@@ -183,7 +211,8 @@ TextEditingController saldoController = TextEditingController();
                             Expanded(
                               child: TextFormField(
                                 readOnly: true,
-                                controller: saldoController,
+                                controller: _saldoController,
+                              
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   labelText: 'Saldo Akhir',
@@ -209,7 +238,7 @@ TextEditingController saldoController = TextEditingController();
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           onChanged: (text) {
-                                member_mandatory_savings = text;
+                                member_mandatory_savings = int.parse(text);
                               },
                           readOnly: false,
                           decoration: InputDecoration(
@@ -225,6 +254,7 @@ TextEditingController saldoController = TextEditingController();
                         ),
                       ),
 
+              
             SizedBox(height: 16.h),
             ElevatedButton(
               onPressed: () {
@@ -261,6 +291,7 @@ TextEditingController saldoController = TextEditingController();
         AppConstans.BASE_URL+AppConstans.MANDATORYSAVINGS+member_id,
         data: {
           'member_mandatory_savings': member_mandatory_savings,
+          'member_mandatory_savings_last_balance': member_mandatory_savings_last_balance,
           'user_id': user_id,
           'member_id': member_id
         },
