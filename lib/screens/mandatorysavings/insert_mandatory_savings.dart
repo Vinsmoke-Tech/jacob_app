@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jacob_app/screens/homepage/deposit_page.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
-import 'package:jacob_app/utility/currency_format.dart';
+import 'package:jacob_app/utility/currency_format2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -35,11 +35,11 @@ class _MandatorySavingsState extends State<MandatorySavings> {
   String savingsaccount ='';
   String memberid ='';
   late String member_id;
-  String member_mandatory_savings_last_balance= '';
   var memberidJson = [];
 
   String total_amount= '0';
-  num member_mandatory_savings= 0;
+  num member_mandatory_savings = 0;
+  num member_mandatory_savings_last_balance= 0;
   num total = 0;
   num subtotal = 0;
   num saldoController = 0;
@@ -53,6 +53,12 @@ TextEditingController _saldoController = TextEditingController(text: 0.toString(
 // TextEditingController outputController = TextEditingController();
   TextEditingController outputController = TextEditingController();
 
+  // Buat controller untuk TextFormField
+TextEditingController _textEditingController = TextEditingController();
+
+TextEditingController savingsTextController = TextEditingController(text: 0.toString());
+
+
     @override
   void initState() {
     super.initState();
@@ -65,29 +71,23 @@ TextEditingController _saldoController = TextEditingController(text: 0.toString(
     obscureText = true;
     member_id = widget.byMandatorySavings[widget.data].toString();
 
+    savingsTextController.text =widget.byMandatorySavings['member_mandatory_savings'].toString();
 
-  // Assuming widget.byMandatorySavings['savings_account_last_balance'] is a String
-  String formattedSaldo = CurrencyFormat.convertToIdr(
-    double.parse(widget.byMandatorySavings['member_mandatory_savings']),
-    0,
-    initialValue: widget.byMandatorySavings['member_mandatory_savings'],
-  );
-  _saldoController.text = formattedSaldo;
   }
 
 // Function to update the form field with the combined value
-  changeDiscountPercentage(var value) {
-    setState(() {
-      print(value);
-      if (value == '' || value == null) {
-        value = "0";
-      }
+  // changeDiscountPercentage(var value) {
+  //   setState(() {
+  //     print(value);
+  //     if (value == '' || value == null) {
+  //       value = "0";
+  //     }
       
-      _saldoController.text = saldoController.toString();
+  //     _saldoController.text = saldoController.toString();
 
-      total = member_mandatory_savings + saldoController ;
-    });
-  }
+  //     total = member_mandatory_savings + saldoController ;
+  //   });
+  // }
 
 
 
@@ -211,8 +211,12 @@ TextEditingController _saldoController = TextEditingController(text: 0.toString(
                             Expanded(
                               child: TextFormField(
                                 readOnly: true,
-                                controller: _saldoController,
-                              
+                                // controller: savingsTextController,
+                                // initialValue: CurrencyFormat.convertToIdr(double.parse(widget.byMandatorySavings['member_mandatory_savings']), 0).toString(),
+                                keyboardType: TextInputType.number,
+                                onChanged: (text) {
+                                  widget.byMandatorySavings['member_mandatory_savings'] = int.tryParse(text) ?? 0;
+                                },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   labelText: 'Saldo Akhir',
@@ -238,7 +242,7 @@ TextEditingController _saldoController = TextEditingController(text: 0.toString(
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           onChanged: (text) {
-                                member_mandatory_savings = int.parse(text);
+                                member_mandatory_savings_last_balance = int.parse(text);
                               },
                           readOnly: false,
                           decoration: InputDecoration(
@@ -290,7 +294,7 @@ TextEditingController _saldoController = TextEditingController(text: 0.toString(
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.MANDATORYSAVINGS+member_id,
         data: {
-          'member_mandatory_savings': member_mandatory_savings,
+          'member_mandatory_savings': widget.byMandatorySavings['member_mandatory_savings'],
           'member_mandatory_savings_last_balance': member_mandatory_savings_last_balance,
           'user_id': user_id,
           'member_id': member_id
