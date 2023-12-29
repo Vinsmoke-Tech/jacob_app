@@ -76,7 +76,7 @@ TextEditingController saldoController = TextEditingController();
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Setor Tunai',style: TextStyle(color: white),),
+        title: const Text('Angsuran',style: TextStyle(color: white),),
         backgroundColor: transparentBrown,
       ),
       body: SingleChildScrollView(
@@ -262,7 +262,7 @@ TextEditingController saldoController = TextEditingController();
                       initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString(),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        labelText: 'Angsuran Bunga',
+                        labelText: 'Pendapatan Lain',
                         labelStyle: TextStyle(
                           color: myFocusNodeFive.hasFocus
                               ? Colors.black
@@ -284,7 +284,7 @@ TextEditingController saldoController = TextEditingController();
                       
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        labelText: 'Denda',
+                        labelText: 'Simpanan Wajib',
                         labelStyle: TextStyle(
                           color: myFocusNodeFive.hasFocus
                               ? Colors.black
@@ -322,7 +322,7 @@ TextEditingController saldoController = TextEditingController();
     );
   }
 
-  Future postDataToServer(BuildContext context,String savings_account_id) async {
+  Future postDataToServer(BuildContext context,String credits_account_id) async {
     final prefs = await SharedPreferences.getInstance();
       token = prefs.getString('token')!;
     try {
@@ -332,11 +332,11 @@ TextEditingController saldoController = TextEditingController();
       dio.options.headers["authorization"] = "Bearer ${token}";
 
       response = await dio.post(
-        AppConstans.BASE_URL+AppConstans.DEPOSITBYID+savings_account_id,
+        AppConstans.BASE_URL+AppConstans.PAYMENTCASH+credits_account_id,
         data: {
           'savings_cash_mutation_amount': savings_cash_mutation_amount,
           'user_id': user_id,
-          'savings_account_id': savings_account_id
+          'credits_account_id': credits_account_id
         },
         options: Options(contentType: Headers.jsonContentType),
       );

@@ -25,7 +25,7 @@ class _InstallmentsListState extends State<InstallmentsList> {
   String user_id = '';
   String member_name = '';
   var savingsAccountId;
-  String member_id ='';
+  String credits_account_id ='';
 
 
   @override
@@ -39,7 +39,7 @@ class _InstallmentsListState extends State<InstallmentsList> {
     fetchData(context, savingsAccountId);
   }
 
-  Future <void> fetchData(BuildContext context, int savingsAccountId) async {
+  Future <void> fetchData(BuildContext context, int credits_account_id) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token')!;
@@ -51,7 +51,7 @@ class _InstallmentsListState extends State<InstallmentsList> {
         AppConstans.BASE_URL+AppConstans.GETDATACREDIT,
         data: {
           'token' : token,
-          'member_id': member_id,
+          'credits_account_id': credits_account_id,
         },
         options: Options(contentType: Headers.jsonContentType),
       );
@@ -205,16 +205,16 @@ class _InstallmentsListState extends State<InstallmentsList> {
 
 void _onListTileTapped(Map<String, dynamic> bySaving) {
   
-  String member_id = bySaving['member_id'].toString();
+  String credits_account_id = bySaving['credits_account_id'].toString();
 
     setState(() {
-      this.member_id = member_id;
+      this.credits_account_id = credits_account_id;
     });
-    print(member_id);
+    print(credits_account_id);
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => InsertInstallments(bySaving: bySaving, data: 'member_id'),
+      builder: (context) => InsertInstallments(bySaving: bySaving, data: 'credits_account_id'),
     ),
   );
 

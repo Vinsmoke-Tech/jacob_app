@@ -118,7 +118,7 @@ calculateTotal() {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Setor Tunai',style: TextStyle(color: white),),
+        title: const Text('Simp Wajib',style: TextStyle(color: white),),
         backgroundColor: transparentBrown,
       ),
       body: SingleChildScrollView(
