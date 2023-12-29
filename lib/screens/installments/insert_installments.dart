@@ -41,8 +41,12 @@ class _InsertInstallmentsState extends State<InsertInstallments> {
   num credits_account_principal_amount = 0;
   num credits_account_interest_amount = 0;
   num credits_payment_fine = 0;
+  num credits_others_income = 0;
+
   late num AngsuranPokok;
 late num BungaValue;
+late num DendaValue;
+
 
   
 
@@ -71,6 +75,7 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
 
     AngsuranPokok = double.parse(widget.bySaving['credits_account_principal_amount']);
     BungaValue = double.parse(widget.bySaving['credits_account_interest_amount']);
+    DendaValue = credits_payment_fine;
 
     angsuranController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_principal_amount']), 0).toString();
     bungaController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString();
@@ -80,6 +85,8 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
 
       bungaController.addListener(onBungaValueChanged);
       angsuranController.addListener(onAngsuranValueChanged);
+      dendaController.addListener(onDendaValueChanged);
+
       // onBungaValueChanged();
       // updateTotalValue();
 
@@ -92,6 +99,22 @@ void onBungaValueChanged() {
 
   try {
     BungaValue = double.parse(bungaText);
+    
+    num total = calculateTotal();
+    updateTotalValue(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
+void onDendaValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String dendaText = dendaController.text; // Remove 'Rp' and commas
+  print('Extracted dendaText: $dendaText'); // Add this line to check the extracted text
+
+  try {
+    DendaValue = double.parse(dendaText);
     
     num total = calculateTotal();
     updateTotalValue(total);
@@ -119,7 +142,7 @@ void updateTotalValue(num total) {
 }
 
 num calculateTotal() {
-  return AngsuranPokok + BungaValue;
+  return AngsuranPokok + BungaValue + DendaValue + credits_others_income;
 }
 
 
@@ -286,6 +309,7 @@ num calculateTotal() {
                     ),
                     child: TextFormField(
                       readOnly: false,
+                      controller: dendaController,
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
                                 credits_payment_fine = int.parse(text);
@@ -318,6 +342,10 @@ num calculateTotal() {
                     ),
                     child: TextFormField(
                       readOnly: false,
+                      keyboardType: TextInputType.number,
+                          onChanged: (text) {
+                                credits_others_income = int.parse(text);
+                              },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: 'Pendapatan Lain',
@@ -422,8 +450,10 @@ num calculateTotal() {
         AppConstans.BASE_URL+AppConstans.PAYMENTCASH+credits_account_id,
         data: {
           'angsuran_total': double.parse(resultController.text.replaceAll(',', '')),
-          'angsuran_pokok': double.parse(angsuranController.text.replaceAll(',', '')),
-          'angsuran_bunga': double.parse(bungaController.text.replaceAll(',', '')),
+          'angsuran_pokok': double.parse(angsuranController.text.replaceAll('.', '').replaceAll('Rp', '').replaceAll(',', '')),
+          'angsuran_bunga': double.parse(bungaController.text.replaceAll('.', '').replaceAll('Rp', '').replaceAll(',', '')),
+          'others_income': credits_others_income,
+          'credits_payment_fine': credits_payment_fine,
           'user_id': user_id,
           'credits_account_id': credits_account_id
         },
