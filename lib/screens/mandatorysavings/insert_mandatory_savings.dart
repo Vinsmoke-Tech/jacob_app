@@ -55,10 +55,10 @@ TextEditingController outputController = TextEditingController();
 
   // Buat controller untuk TextFormField
 TextEditingController _textEditingController = TextEditingController();
-TextEditingController resultController = TextEditingController();
 
 
 TextEditingController savingsTextController = TextEditingController(text: 0.toString());
+TextEditingController resultController = TextEditingController();
 TextEditingController HasilTextController = TextEditingController(text: 0.toString());
 
 

@@ -34,13 +34,15 @@ class _InsertInstallmentsState extends State<InsertInstallments> {
   String user_id = '';
   String savingsaccount ='';
   String memberid ='';
-  late String savings_account_id;
-  String savings_cash_mutation_amount= '';
+  late String credits_account_id;
+  // String credits_account_id= '';
   var memberidJson = [];
   
   num credits_account_principal_amount = 0;
   num credits_account_interest_amount = 0;
   num credits_payment_fine = 0;
+  late num AngsuranPokok;
+late num BungaValue;
 
   
 
@@ -48,6 +50,13 @@ class _InsertInstallmentsState extends State<InsertInstallments> {
 
 
 TextEditingController saldoController = TextEditingController();
+TextEditingController angsuranController = TextEditingController();
+TextEditingController bungaController = TextEditingController();
+TextEditingController dendaController = TextEditingController();
+TextEditingController lainController = TextEditingController();
+TextEditingController resultController = TextEditingController();
+TextEditingController HasilTextController = TextEditingController(text: 0.toString());
+
     @override
   void initState() {
     super.initState();
@@ -58,17 +67,61 @@ TextEditingController saldoController = TextEditingController();
     myFocusNodeFive = FocusNode();
     myFocusNodeSix = FocusNode();
     obscureText = true;
-    savings_account_id = widget.bySaving[widget.data].toString();
+    credits_account_id = widget.bySaving[widget.data].toString();
 
+    AngsuranPokok = double.parse(widget.bySaving['credits_account_principal_amount']);
+    BungaValue = double.parse(widget.bySaving['credits_account_interest_amount']);
 
-  // Assuming widget.bySaving['savings_account_last_balance'] is a String
-  // String formattedSaldo = CurrencyFormat.convertToIdr(
-  //   double.parse(widget.bySaving ['savings_account_last_balance']),
-  //   0,
-  //   initialValue: widget.bySaving['savings_account_last_balance'],
-  // );
-  // saldoController.text = formattedSaldo;
+    angsuranController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_principal_amount']), 0).toString();
+    bungaController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString();
+
+      resultController.text = calculateTotal().toString();
+      HasilTextController.text = calculateTotal().toString();
+
+      bungaController.addListener(onBungaValueChanged);
+      angsuranController.addListener(onAngsuranValueChanged);
+      // onBungaValueChanged();
+      // updateTotalValue();
+
   }
+
+void onBungaValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String bungaText = bungaController.text; // Remove 'Rp' and commas
+  print('Extracted bungaText: $bungaText'); // Add this line to check the extracted text
+
+  try {
+    BungaValue = double.parse(bungaText);
+    
+    num total = calculateTotal();
+    updateTotalValue(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
+void onAngsuranValueChanged() {
+  // Update AngsuranPokok when the value in the text field changes
+  AngsuranPokok = int.parse(angsuranController.text.replaceAll(',', '')); // Remove commas before parsing
+
+  num total = calculateTotal();
+  updateTotalValue(total);
+}
+
+void updateTotalValue(num total) {
+  num total = calculateTotal();
+  setState(() {
+    String formattedTotal = CurrencyFormat.convertToIdr(total.toInt(), 0);
+    HasilTextController.text = formattedTotal;
+    resultController.text = total.toString();
+  });
+}
+
+num calculateTotal() {
+  return AngsuranPokok + BungaValue;
+}
+
 
 
   @override
@@ -85,6 +138,7 @@ TextEditingController saldoController = TextEditingController();
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              
               Row(
               children: <Widget>[
                 Expanded(
@@ -167,8 +221,9 @@ TextEditingController saldoController = TextEditingController();
                       color: Colors.grey[200],
                     ),
                     child: TextFormField(
-                      readOnly: true,
-                      initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_principal_amount']), 0).toString(),
+                      readOnly: false,
+                      controller: angsuranController,
+                      // initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_principal_amount']), 0).toString(),
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
                                 credits_account_principal_amount = int.parse(text);
@@ -200,11 +255,15 @@ TextEditingController saldoController = TextEditingController();
                       color: Colors.grey[200],
                     ),
                     child: TextFormField(
-                      readOnly: true,
-                      initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString(),
+                      readOnly: false,
+                      controller: bungaController,
+                      // initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString(),
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
+                              setState(() {
                                 credits_account_interest_amount = int.parse(text);
+                              });
+
                               },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -258,8 +317,7 @@ TextEditingController saldoController = TextEditingController();
                       color: Colors.grey[200],
                     ),
                     child: TextFormField(
-                      readOnly: true,
-                      initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString(),
+                      readOnly: false,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: 'Pendapatan Lain',
@@ -296,13 +354,42 @@ TextEditingController saldoController = TextEditingController();
                 ),
               ],
             ),
+
+            SizedBox(height: 16.h),
+
+              Container(
+                  padding: EdgeInsets.only(left: 16.w),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(25.r)),
+                    color: Colors.grey[200],
+                    
+                  ),
+                    child: TextFormField(
+                      controller: HasilTextController,
+                      readOnly: true,
+                      keyboardType: TextInputType.number,
+                                onChanged: (text) {
+                                    setState(() {
+                                    calculateTotal();
+                                  });
+                                },
+                                  
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: 'Total',
+                      labelStyle: TextStyle(
+                        color: myFocusNodeFive.hasFocus ? Colors.black : blue,
+                    ),
+                  ),
+                ),
+              ),
         
               SizedBox(height: 16.h),
 
               ElevatedButton(
                 onPressed: () {
                   // Process to send data to the server
-                  postDataToServer(context,savings_account_id);
+                  postDataToServer(context,credits_account_id);
                 },
                 style: ElevatedButton.styleFrom(
                   primary: transparentBrown,
@@ -334,7 +421,9 @@ TextEditingController saldoController = TextEditingController();
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.PAYMENTCASH+credits_account_id,
         data: {
-          'savings_cash_mutation_amount': savings_cash_mutation_amount,
+          'angsuran_total': double.parse(resultController.text.replaceAll(',', '')),
+          'angsuran_pokok': double.parse(angsuranController.text.replaceAll(',', '')),
+          'angsuran_bunga': double.parse(bungaController.text.replaceAll(',', '')),
           'user_id': user_id,
           'credits_account_id': credits_account_id
         },

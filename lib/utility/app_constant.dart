@@ -28,7 +28,7 @@ class AppConstans {
 
   static const String GETDATACREDIT = "/api/getDataCredit";
   static const String POSTCREDITSBYID = "/api/PostCreditsById";
-  static const String PAYMENTCASH = "/api/processAddCreditsPaymentCash";
+  static const String PAYMENTCASH = "/api/processAddCreditsPaymentCash/";
 
 
   static const String DEPOSITBYID = "/api/saving/deposit/";
