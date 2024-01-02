@@ -1,7 +1,7 @@
 class AppConstans {
   static const String APP_NAME = "JACOB";
   static const String APP_VERSION = "2.0.1";
-  static const String BASE_URL = "http://192.168.1.31:8000";
+  static const String BASE_URL = "http://192.168.1.40:8000";
   // static const String BASE_URL = "http://117.53.144.51/jjm";
 
 
@@ -34,6 +34,9 @@ class AppConstans {
   static const String DEPOSITBYID = "/api/saving/deposit/";
   static const String WITHDRAWBYID = "/api/saving/withdraw/";
 
+  // printer end points
+  static const String PRINTER_ADDRESS = "/api/printer-address";
+  static const String PRINTER_UPDATE = '/api/printer-address/update';
 
 
 }

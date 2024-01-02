@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jacob_app/screens/cashdeposit/cash_deposit.dart';
-import 'package:jacob_app/screens/cashwithdraw/cash_withdraw.dart';
 import 'package:jacob_app/screens/homepage/deposit_page.dart';
 import 'package:jacob_app/screens/homepage/installments_page.dart';
 import 'package:jacob_app/screens/homepage/mandatory_savings_page.dart';
