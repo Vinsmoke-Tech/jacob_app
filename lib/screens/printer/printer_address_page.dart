@@ -18,7 +18,7 @@ class PrinterAddressPage extends StatefulWidget {
 class _PrinterAddressPageState extends State<PrinterAddressPage> {
   String username = '';
   String user_id = '';
-  String user_group_name = '';
+  String user_group_id = '';
   String printer_address = '';
   String token = '';
   late FocusNode myFocusNode;
@@ -36,9 +36,11 @@ class _PrinterAddressPageState extends State<PrinterAddressPage> {
     setState(() {
       username = prefs.getString('username')!;
       user_id = prefs.getString('user_id')!;
-      user_group_name = prefs.getString('user_group_name')!;
+      user_group_id = prefs.getString('user_group_id')!;
       printer_address = prefs.getString('printer_address')!;
       token = prefs.getString('token')!;
+
+      // print(user_id);
     });
   }
 
@@ -118,7 +120,7 @@ class _PrinterAddressPageState extends State<PrinterAddressPage> {
                   Column(
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.all(12.0),
+                          padding: EdgeInsets.all(6.0),
                           margin: EdgeInsets.only(left: 12.0, right: 12.0),
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height / 10.0,
@@ -250,7 +252,7 @@ class _PrinterAddressPageState extends State<PrinterAddressPage> {
         });
         Navigator.pop(context);
       } else {
-        // print(e.message);
+        print(e.message);
       }
     }
   }
@@ -266,7 +268,7 @@ class _PrinterAddressPageState extends State<PrinterAddressPage> {
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.PRINTER_ADDRESS,
-        data: {'user_id': user_id == null ? null : user_id},
+        data: {'user_id': user_id == null ? null : user_id },
         options: Options(contentType: Headers.jsonContentType),
       );
 
@@ -276,6 +278,7 @@ class _PrinterAddressPageState extends State<PrinterAddressPage> {
         String prefPrinterAddress = response.data['data'].toString();
         await prefs.setString('printer_address', prefPrinterAddress);
         printer_address = prefPrinterAddress;
+        // print(user_id);
         //Messsage
         //SettingsPage
       }
@@ -295,6 +298,8 @@ class _PrinterAddressPageState extends State<PrinterAddressPage> {
         });
       } else {
         print(e.message);
+        // print(user_id);
+
       }
     }
   }

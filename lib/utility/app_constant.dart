@@ -35,8 +35,9 @@ class AppConstans {
   static const String WITHDRAWBYID = "/api/saving/withdraw/";
 
   // printer end points
-  static const String PRINTER_ADDRESS = "/api/printer-address";
-  static const String PRINTER_UPDATE = '/api/printer-address/update';
+  static const String PRINTER_ADDRESS = "/api/printer-address/";
+  static const String PRINTER_UPDATE = "/api/printer-address/update/";
+  static const String DEPOSITPRINT = "/api/print-deposit";
 
 
 }

@@ -41,7 +41,13 @@ dependencies:
   google_fonts: ^6.1.0
   loading_animation_widget: ^1.2.0+4
   qr_code_scanner: ^1.0.1
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.11.0
+  flutter_blue: ^0.8.0
+  esc_pos_utils: ^1.1.0
+  simple_shadow: ^0.3.1
+
+
+
 
 
 

@@ -182,8 +182,10 @@ class _LoginPageState extends State<LoginPage> {
         hideLoaderDialog(context);
         //setSharedPreference
         String prefUsername = response.data['conntent']['username'];
+        String prefUserId = response.data['conntent']['user_id'].toString();
         String prefToken = response.data['token'];
         await prefs.setString('username', prefUsername);
+        await prefs.setString('user_id', prefUserId);
         await prefs.setString('token', prefToken);
 
         //Messsage

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jacob_app/screens/auth/login_page.dart';
 import 'package:jacob_app/screens/homepage/deposit_page.dart';
+import 'package:jacob_app/screens/printer/printer_address_page.dart';
 import 'package:jacob_app/screens/profile/about_page.dart';
 import 'package:jacob_app/screens/profile/change_password_page.dart';
 import 'package:jacob_app/utility/app_constant.dart';
@@ -22,6 +23,7 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
 
   String username = '';
+  String user_id = '';
   String token = '';
 
   @override
@@ -34,6 +36,7 @@ class _SettingPageState extends State<SettingPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString('username')!;
+      user_id = prefs.getString('user_id')!;
       token = prefs.getString('token')!;
     });
 
@@ -154,10 +157,10 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
 
-              GestureDetector(
+              InkWell(
                 onTap: () {
                   // Tambahkan tindakan yang akan dijalankan ketika widget ini ditekan
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ChangePasswordPage()));
+                  fetchPrinterAddress(context);
                 },
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(16.w, 10.h, 16.w, 0.h),
@@ -187,7 +190,7 @@ class _SettingPageState extends State<SettingPage> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
                             child: Text(
-                              'Buy Assets',
+                              'Printer',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16.sp,
@@ -256,6 +259,54 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
   
+    void fetchPrinterAddress(BuildContext context) async {
+    // Remove data for the 'counter' key.
+    final prefs = await SharedPreferences.getInstance();
+    showLoaderDialog(context);
+    token = prefs.getString('token')!;
+    try {
+      Response response;
+      var dio = Dio();
+      dio.options.headers["authorization"] = "Bearer ${token}";
+      response = await dio.post(
+        AppConstans.BASE_URL+AppConstans.PRINTER_ADDRESS,
+        data: {'user_id': user_id},
+        options: Options(contentType: Headers.jsonContentType),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        //berhasil
+        hideLoaderDialog(context);
+        String prefPrinterAddress = response.data['data'].toString();
+        await prefs.setString('printer_address', prefPrinterAddress);
+        print(prefPrinterAddress);
+        //Messsage
+        //SettingsPage
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => PrinterAddressPage()));
+      }
+    } on DioError catch (e) {
+      hideLoaderDialog(context);
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        //gagal
+        String errorMessage = e.response?.data['message'];
+        _onWidgetDidBuild(() {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        });
+      } else {
+        print(e.message);
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => PrinterAddressPage()));
+      }
+    }
+  }
+
   void fetchLogout(BuildContext context) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
