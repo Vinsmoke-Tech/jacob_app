@@ -270,7 +270,7 @@ class _SettingPageState extends State<SettingPage> {
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.PRINTER_ADDRESS,
-        data: {'user_id': user_id},
+        data: {'user_id': user_id == null ? null : user_id},
         options: Options(contentType: Headers.jsonContentType),
       );
 

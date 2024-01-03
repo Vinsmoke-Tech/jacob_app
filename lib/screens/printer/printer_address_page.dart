@@ -121,7 +121,7 @@ class _PrinterAddressPageState extends State<PrinterAddressPage> {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.all(6.0),
-                          margin: EdgeInsets.only(left: 12.0, right: 12.0),
+                          margin: EdgeInsets.only(left: 6.0, right: 6.0),
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height / 10.0,
                           decoration: BoxDecoration(

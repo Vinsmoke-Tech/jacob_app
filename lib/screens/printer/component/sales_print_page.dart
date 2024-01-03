@@ -115,7 +115,7 @@ class _SalesPrintPageState extends State<SalesPrintPage> {
     await getSalesPrintData(context);
     printer.add(
       gen.text(
-        preferencecompany['company_name'].toString(),
+        preferencecompany['branch_name'].toString(),
         styles: const PosStyles(bold: true, align: PosAlign.center),
       ),
     );
@@ -347,7 +347,7 @@ class _SalesPrintPageState extends State<SalesPrintPage> {
         AppConstans.BASE_URL+AppConstans.DEPOSITPRINT,
         data: {
           'user_id': user_id == null ? null : user_id,
-          'savings_cash_mutation_id': savings_cash_mutation_id
+          'savings_cash_mutation_id': savings_cash_mutation_id == null ? null : savings_cash_mutation_id 
         },
         options: Options(contentType: Headers.jsonContentType),
       );
