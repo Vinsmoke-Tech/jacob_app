@@ -104,47 +104,44 @@ TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text(
-        'Setor Tunai',
-        style: TextStyle(color: white),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Setor Tunai',style: TextStyle(color: white),),
+        backgroundColor: const Color(0xffa5683a),
       ),
-      backgroundColor: const Color(0xffa5683a),
-    ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        Navigator.of(context).push(_animatedRoute());
-      },
-      backgroundColor: const Color(0xffa5683a),
-      elevation: 10,
-      child: Icon(
-        Icons.add,
-        color: Colors.white,
-        size: 20.w,
-      ),
-    ),
-    body: RefreshIndicator(
-      onRefresh: refresh,
-      backgroundColor: blue,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(10).r,
-          child: Container(
-            child: savingsidJson.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/image/support.png'),
-                        Text(
-                          'Data not found',
-                          style: TextStyle(fontSize: 16.sp, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ) // Show a loading indicator while data is being fetched.
-                : ListView.builder(
+      floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push(_animatedRoute());
+                  },
+                  backgroundColor: const Color(0xffa5683a),
+                  elevation: 10,
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 20.w,
+                  ),
+                ),
+                body: RefreshIndicator(
+          onRefresh: refresh,
+          backgroundColor: blue,
+        child: SingleChildScrollView(
+          child: Padding(
+              padding: EdgeInsets.all(10).r,
+              child: Container(
+                child: savingsidJson.isEmpty
+                  ?   Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/image/support.png'),
+                            Text(
+                              'Data not found',
+                              style: TextStyle(fontSize: 16.sp, color: Colors.black),
+                            ),
+                          ],
+                        )
+                      ) // Show a loading indicator while data is being fetched.
+                  : ListView.builder(
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: savingsidJson.length,
@@ -153,59 +150,66 @@ TextEditingController _controller = TextEditingController();
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           // Generated code for this ListTile Widget...
-                          ListTile(
-                            title: Text(
-                              (savingsidJson[index]['member']['member_name'].toString()),
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                color: transparentBrown,
+                          GestureDetector(
+                            onTap: () {
+                              // Aksi yang ingin Anda lakukan saat ListTile ditekan
+                              printUnpaidOrder(context,
+                              savingsidJson[index]['savings_cash_mutation_id']);
+                            },
+                            child: ListTile(
+                              title: Text(
+                                (savingsidJson[index]['member']['member_name'].toString()),
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  color: transparentBrown,
+                                ),
+                                overflow: TextOverflow.ellipsis, // Memberikan elipsis jika teks overflow
+                                maxLines: 1, // Hanya satu baris teks yang ditampilkan
                               ),
-                              overflow: TextOverflow.ellipsis, // Memberikan elipsis jika teks overflow
-                              maxLines: 1, // Hanya satu baris teks yang ditampilkan
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  (savingsidJson[index]['pickup_date'] ?? 'Data Kosong'),
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: black,
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              
+                                  Text(
+                                    (savingsidJson[index]['pickup_date'] ?? 'Data Kosong'),
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: black,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            trailing: GestureDetector(
-                              onTap: () {
-                                printUnpaidOrder(context, savingsidJson[index]['savings_cash_mutation_id']);
-                              },
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                child: Center(
-                                  child: Icon(Icons.print, color: Colors.white),
-                                ),
+                                  
+                                ],
                               ),
-                            ),
-                            tileColor: darkGrey,
-                            dense: false,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              trailing: Text(
+                                          CurrencyFormat.convertToIdr(
+                                            double.parse(savingsidJson[index]['savings_cash_mutation_amount'] ?? '0'),
+                                            2, // specify the number of decimal digits
+                                            initialValue: 'Data Kosong',
+                                          ),
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            color: black,
+                                          ),
+                                        ),
+                              tileColor: darkGrey,
+                              dense: false,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                             ),
                           ),
                           const Divider(),
                         ],
                       );
+                      
                     },
                   ),
-          ),
+              ),
+            ),
         ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 
     Route _animatedRoute() {
 

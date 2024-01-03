@@ -28,7 +28,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
   String printer_address = '';
   String printer_kitchen_address = '';
   String token = '';
-  String sales_invoice_id = '';
+  String savings_cash_mutation_id = '';
   String start_date = DateTime.now().toString();
   String end_date = DateTime.now().toString();
   late FocusNode myFocusNode;
@@ -110,7 +110,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
   void printWithDevice(BluetoothDevice device) async {
     device.disconnect();
     await device.connect();
-    final gen = Generator(PaperSize.mm80, await CapabilityProfile.load());
+    final gen = Generator(PaperSize.mm58, await CapabilityProfile.load());
     final printer = BluePrint();
     // print(navbar_index);
     await getSalesPrintData(context);
@@ -121,12 +121,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
         styles: const PosStyles(bold: true, align: PosAlign.center),
       ),
     );
-    printer.add(
-      gen.text(
-        preferencecompany['branch_address'].toString(),
-        styles: const PosStyles(bold: true, align: PosAlign.center),
-      ),
-    );
+
     printer.add(
       gen.text(
         'WA ' + preferencecompany['branch_phone1'].toString(),
@@ -139,165 +134,80 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
         salesinvoice['savings_cash_mutation_date'].toString(),
         styles: const PosStyles(bold: true, align: PosAlign.right),
       ),
+      
     );
+    
+    
     printer.add(gen.feed(1));
-    salesinvoiceitem.forEach((value) {
-      printer.add(
-        gen.text(
-          value['member_name'].toString(),
-          styles: const PosStyles(align: PosAlign.left),
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: "Anggota :",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
         ),
-      );
-      printer.add(
-        gen.row([
-          PosColumn(
-            text: "x" + value['quantity'].toString(),
-            width: 5,
-            styles: PosStyles(align: PosAlign.left),
-          ),
-          PosColumn(
-            text: value['savings_cash_mutation_amount'] != 0
-                ? "@" +
-                CurrencyFormat.convertToIdrwithoutSymbol(
-                    int.parse(value['savings_cash_mutation_amount']), 0)
-                : "0",
-            width: 4,
-            styles: PosStyles(align: PosAlign.left),
-          ),
-          // PosColumn(
-          //   text: value['subtotal_amount'] != 0
-          //       ? CurrencyFormat.convertToIdrwithoutSymbol(
-          //       int.parse(value['subtotal_amount']), 0)
-          //       : "0",
-          //   width: 3,
-          //   styles: PosStyles(align: PosAlign.right),
-          // ),
-        ]),
-      );
-    });
+      ]),
+    );
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: salesinvoice['member']['member_name'],
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
     printer.add(gen.feed(1));
+
     printer.add(
       gen.row([
         PosColumn(
-          text: "Subtotal",
-          width: 9,
+          text: "Total Deposit :",
+          width: 12,
           styles: PosStyles(align: PosAlign.left),
-        ),
-        PosColumn(
-          text: salesinvoice['subtotal_amount'] != 0
-              ? CurrencyFormat.convertToIdrwithoutSymbol(
-              int.parse(salesinvoice['subtotal_amount']), 0)
-              : "0",
-          width: 3,
-          styles: PosStyles(align: PosAlign.right),
         ),
       ]),
     );
+
     printer.add(
       gen.row([
         PosColumn(
-          text: "Diskon",
-          width: 9,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-        PosColumn(
-          text: salesinvoice['discount_amount_total'] != 0
+          text: salesinvoice['savings_cash_mutation_amount'] != 0
               ? CurrencyFormat.convertToIdrwithoutSymbol(
-              int.parse(salesinvoice['discount_amount_total']), 0)
+              double.parse(salesinvoice['savings_cash_mutation_amount']), 2)
               : "0",
-          width: 3,
-          styles: PosStyles(align: PosAlign.right),
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
         ),
       ]),
     );
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: "PPN",
-          width: 9,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-        PosColumn(
-          text: salesinvoice['ppn_amount_total'] != 0
-              ? CurrencyFormat.convertToIdrwithoutSymbol(
-              double.parse(salesinvoice['ppn_amount_total']), 0)
-              : "0",
-          width: 3,
-          styles: PosStyles(align: PosAlign.right),
-        ),
-      ]),
-    );
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: "Total",
-          width: 9,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-        PosColumn(
-          text: salesinvoice['total_amount'] != 0
-              ? CurrencyFormat.convertToIdrwithoutSymbol(
-              int.parse(salesinvoice['total_amount']), 0)
-              : "0",
-          width: 3,
-          styles: PosStyles(align: PosAlign.right),
-        ),
-      ]),
-    );
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: "Uang Bayar",
-          width: 9,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-        PosColumn(
-          text: salesinvoice['paid_amount'] != 0
-              ? CurrencyFormat.convertToIdrwithoutSymbol(
-              int.parse(salesinvoice['paid_amount']), 0)
-              : "0",
-          width: 3,
-          styles: PosStyles(align: PosAlign.right),
-        ),
-      ]),
-    );
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: "Kembalian",
-          width: 9,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-        PosColumn(
-          text: salesinvoice['change_amount'] != 0
-              ? CurrencyFormat.convertToIdrwithoutSymbol(
-              int.parse(salesinvoice['change_amount']), 0)
-              : "0",
-          width: 3,
-          styles: PosStyles(align: PosAlign.right),
-        ),
-      ]),
-    );
+
     printer.add(gen.feed(1));
+
     printer.add(
-      gen.text(
-        preferencecompany['receipt_bottom_text'].toString(),
-        styles: const PosStyles(bold: true, align: PosAlign.center),
-      ),
+      gen.row([
+        PosColumn(
+          text: "Tanggal Deposit :",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
     );
-    printer.add(gen.feed(2));
+
     printer.add(
-      gen.text(
-        salesinvoice['created_at'].toString().substring(0, 19),
-        styles: const PosStyles(bold: true, align: PosAlign.right),
-      ),
+      gen.row([
+        PosColumn(
+          text: salesinvoice['savings_cash_mutation_date'],
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
     );
-    printer.add(
-      gen.text(
-        salesinvoice['name'].toString(),
-        styles: const PosStyles(bold: true, align: PosAlign.right),
-      ),
-    );
+    
+    
     printer.add(gen.feed(3));
     await printer.printData(device);
     device.disconnect();
@@ -337,7 +247,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                                   child: ElevatedButton.icon(
                                     onPressed: () {
                                       findDevices();
-                                      // printWithDevice(scanResult![2].device);
+                                      printWithDevice(scanResult![2].device);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color.fromRGBO(236, 60, 3, 1),
@@ -462,7 +372,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
     final prefs = await SharedPreferences.getInstance();
     showLoaderDialog(context);
     token = prefs.getString('token')!;
-    sales_invoice_id = prefs.getString('sales_invoice_id')!;
+    savings_cash_mutation_id = prefs.getString('savings_cash_mutation_id')!;
     try {
       Response response;
       var dio = Dio();
@@ -471,7 +381,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
         AppConstans.BASE_URL+AppConstans.DEPOSITPRINT,
         data: {
           'user_id': user_id == null ? null : user_id,
-          'sales_invoice_id': sales_invoice_id
+          'savings_cash_mutation_id': savings_cash_mutation_id
         },
         options: Options(contentType: Headers.jsonContentType),
       );
@@ -479,8 +389,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         //berhasil
         hideLoaderDialog(context);
-        salesinvoice = response.data['salesinvoice'];
-        salesinvoiceitem = response.data['salesinvoiceitem'];
+        salesinvoice = response.data['data'];
         preferencecompany = response.data['preferencecompany'];
         //Messsage
         //SettingsPage
@@ -526,6 +435,8 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
         String prefPrinterAddress = response.data['data'].toString();
         await prefs.setString('printer_address', prefPrinterAddress);
         printer_address = prefPrinterAddress;
+        print(user_id);
+
         //Messsage
         //SettingsPage
       }
