@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jacob_app/screens/homepage/deposit_page.dart';
+import 'package:jacob_app/screens/navbar/bottom_navbar.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
 import 'package:jacob_app/utility/currency_format2.dart';
@@ -372,7 +373,7 @@ calculateTotal() {
          // Redirect to a new page
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()), // Gantilah dengan nama halaman redirect yang sesuai
+            MaterialPageRoute(builder: (context) =>  BottomNavBar(initialIndex: 3)), // Gantilah dengan nama halaman redirect yang sesuai
           );
           // Navigator.pop(context);
       } 

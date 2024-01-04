@@ -8,15 +8,19 @@ import 'package:jacob_app/screens/profile/setting_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNavBar extends StatefulWidget {
+  final int initialIndex;
+
+  const BottomNavBar({Key? key, required this.initialIndex}) : super(key: key);
+
   @override
-  _BottomNavBarState createState() =>
-      _BottomNavBarState();
+  _BottomNavBarState createState() => _BottomNavBarState(initialIndex);
 }
 
 class _BottomNavBarState
     extends State<BottomNavBar> {
   int _currentIndex = 0;
 
+  _BottomNavBarState(this._currentIndex);
   String username = '';
   String user_id = '';
   String token = '';

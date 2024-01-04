@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage>
       var duration = const Duration(milliseconds: 2500);
       return Timer(duration, () {
         if (token != null && token!.isNotEmpty) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => BottomNavBar()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => BottomNavBar(initialIndex: 0)));
         } else {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
         }
@@ -129,7 +129,7 @@ class _SplashPageState extends State<SplashPage>
       if (response.statusCode == 200 || response.statusCode == 201) {
         //berhasil
         //SettingsPage
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => BottomNavBar()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) =>  BottomNavBar(initialIndex: 0)));
         _onWidgetDidBuild(() {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

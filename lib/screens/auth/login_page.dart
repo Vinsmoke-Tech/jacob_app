@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
         //homePage
         // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => BottomNavBar()));
+            MaterialPageRoute(builder: (context) =>  BottomNavBar(initialIndex: 0)));
       }
     } on DioError catch (e) {
       // ignore: use_build_context_synchronously
