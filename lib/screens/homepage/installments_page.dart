@@ -23,7 +23,7 @@ class _InstallmentsPageState extends State<InstallmentsPage> {
   String saving_id = '';
   String mutationamount = '';
   var savingsidJson = [];
-  var savings_cash_mutation_id ;
+  var credits_payment_id ;
 
 
 TextEditingController _controller = TextEditingController();
@@ -32,8 +32,8 @@ TextEditingController _controller = TextEditingController();
   void initState() {
     super.initState();
     loadSharedPreference();
-    savings_cash_mutation_id = 0;
-    fetchSaldo(context, savings_cash_mutation_id);
+    credits_payment_id = 0;
+    fetchSaldo(context, credits_payment_id);
     
   }
 
@@ -48,10 +48,10 @@ TextEditingController _controller = TextEditingController();
   }
 
     Future<void> refresh()async{
-    fetchSaldo(context, savings_cash_mutation_id);
+    fetchSaldo(context, credits_payment_id);
   }
 
-    Future <void> fetchSaldo(BuildContext context, int savings_cash_mutation_id) async {
+    Future <void> fetchSaldo(BuildContext context, int credits_payment_id) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token')!;
@@ -60,10 +60,10 @@ TextEditingController _controller = TextEditingController();
       var dio = Dio();
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
-        AppConstans.BASE_URL+AppConstans.WITHDRAWMUTATION,
+        AppConstans.BASE_URL+AppConstans.LISTCREDIT,
         data: {
           'user_id': user_id == null ? null : user_id,
-          'savings_cash_mutation_id':savings_cash_mutation_id == null ? null : savings_cash_mutation_id,
+          'credits_payment_id':credits_payment_id == null ? null : credits_payment_id,
         },
         options: Options(contentType: Headers.jsonContentType),
       );
@@ -160,7 +160,7 @@ TextEditingController _controller = TextEditingController();
                                 children: [
                               
                                   Text(
-                                    (savingsidJson[index]['pickup_date'] ?? 'Data Kosong'),
+                                    (savingsidJson[index]['credits_payment_date'] ?? 'Data Kosong'),
                                     style: TextStyle(
                                       fontSize: 12.sp,
                                       color: black,

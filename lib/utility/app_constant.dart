@@ -24,11 +24,16 @@ class AppConstans {
   static const String INSERTSAVINGS = "/api/PostSavingsById/";
   static const String POSTMUTATION = "/api/PostSavingsmutation";
   static const String WITHDRAWMUTATION = "/api/GetWithdraw";
-  static const String MANDATORYSAVINGS = "/api/processAddMemberSavings/";
 
+  //SimpWajib
+  static const String MANDATORYSAVINGS = "/api/processAddMemberSavings/";
+  
+  //ANGSURAN
   static const String GETDATACREDIT = "/api/getDataCredit";
   static const String POSTCREDITSBYID = "/api/PostCreditsById";
   static const String PAYMENTCASH = "/api/processAddCreditsPaymentCash/";
+  static const String LISTCREDIT = "/api/GetAngsuran";
+
 
 
   static const String DEPOSITBYID = "/api/saving/deposit/";
