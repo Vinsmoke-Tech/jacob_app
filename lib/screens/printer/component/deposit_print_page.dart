@@ -160,12 +160,34 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
       ]),
     );
 
+        printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: "Jenis Simpanan :",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: salesinvoice['savingdata']['savings_name'],
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
     printer.add(gen.feed(1));
 
     printer.add(
       gen.row([
         PosColumn(
-          text: "Total Deposit :",
+          text: "Total Setor Tunai :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -190,7 +212,7 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: "Tanggal Deposit :",
+          text: "Saldo :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -200,7 +222,7 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savings_cash_mutation_date'],
+          text: salesinvoice['savings_account_last_balance'],
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
