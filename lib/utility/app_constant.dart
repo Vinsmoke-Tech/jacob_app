@@ -38,6 +38,10 @@ class AppConstans {
   static const String PRINTER_ADDRESS = "/api/printer-address/";
   static const String PRINTER_UPDATE = "/api/printer-address/update/";
   static const String DEPOSITPRINT = "/api/print-deposit";
+  static const String WITHDRAWPRINT = "/api/print-withdraw";
+  static const String ANGSURANPRINT = "/api/print-credits-payment";
+
+
 
 
 }

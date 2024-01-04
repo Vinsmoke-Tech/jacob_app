@@ -14,14 +14,14 @@ import '../../../utility/currency_format.dart';
 import '../../../widget/custom_loading.dart';
 import 'no_printer_page.dart';
 
-class OrderPrintPage extends StatefulWidget {
-  const OrderPrintPage({super.key});
+class WithdrawPrintPage extends StatefulWidget {
+  const WithdrawPrintPage({super.key});
 
   @override
-  State<OrderPrintPage> createState() => _OrderPrintPageState();
+  State<WithdrawPrintPage> createState() => _WithdrawPrintPageState();
 }
 
-class _OrderPrintPageState extends State<OrderPrintPage> {
+class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
   String username = '';
   String user_id = '';
   String user_group_name = '';
@@ -113,7 +113,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
     final gen = Generator(PaperSize.mm58, await CapabilityProfile.load());
     final printer = BluePrint();
     // print(navbar_index);
-    await getSalesPrintData(context);
+    await PrintGetWithdraw(context);
     // printer.add(gen.qrcode('www.ciptasolutindo.id'));
     printer.add(
       gen.text(
@@ -165,7 +165,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: "Total Deposit :",
+          text: "Total Tarik Tunai :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -190,7 +190,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: "Tanggal Deposit :",
+          text: "Tanggal Tarik Tunai :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -367,7 +367,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
     );
   }
 
-  Future<void> getSalesPrintData(BuildContext context) async {
+  Future<void> PrintGetWithdraw(BuildContext context) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     showLoaderDialog(context);
@@ -378,7 +378,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
       var dio = Dio();
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
-        AppConstans.BASE_URL+AppConstans.DEPOSITPRINT,
+        AppConstans.BASE_URL+AppConstans.WITHDRAWPRINT,
         data: {
           'user_id': user_id == null ? null : user_id,
           'savings_cash_mutation_id': savings_cash_mutation_id

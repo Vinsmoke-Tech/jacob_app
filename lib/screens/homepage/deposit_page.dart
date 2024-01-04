@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jacob_app/screens/navbar/bottom_navbar.dart';
-import 'package:jacob_app/screens/printer/component/order_print_page.dart';
+import 'package:jacob_app/screens/printer/component/deposit_print_page.dart';
 import 'package:jacob_app/screens/serach_savings/search_savings_deposit.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
@@ -93,13 +93,13 @@ TextEditingController _controller = TextEditingController();
     }
   }
 
-    void printUnpaidOrder(BuildContext context, var savings_cash_mutation_id) async {
+    void printDeposit(BuildContext context, var savings_cash_mutation_id) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('savings_cash_mutation_id', savings_cash_mutation_id.toString());
     prefs.setString('print_status', "0");
 
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => OrderPrintPage()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => DepositPrintPage()));
   }
 
   @override
@@ -153,7 +153,7 @@ TextEditingController _controller = TextEditingController();
                           GestureDetector(
                             onTap: () {
                               // Aksi yang ingin Anda lakukan saat ListTile ditekan
-                              printUnpaidOrder(context,
+                              printDeposit(context,
                               savingsidJson[index]['savings_cash_mutation_id']);
                             },
                             child: ListTile(

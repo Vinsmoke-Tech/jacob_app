@@ -342,6 +342,7 @@ num calculateTotal() {
                     ),
                     child: TextFormField(
                       readOnly: false,
+                      controller: lainController,
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
                                 credits_others_income = int.parse(text);
