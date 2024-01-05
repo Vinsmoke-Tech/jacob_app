@@ -38,7 +38,7 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
   List<ScanResult>? filteredScanResult;
   int? navbar_index;
   var salesinvoice;
-  var salesinvoiceitem;
+  var company;
   var preferencecompany;
   var expenditure;
   int capital_money_total = 0;
@@ -117,6 +117,13 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
     // printer.add(gen.qrcode('www.ciptasolutindo.id'));
     printer.add(
       gen.text(
+        company['company_name'].toString(),
+        styles: const PosStyles(bold: true, align: PosAlign.center),
+      ),
+    );
+
+    printer.add(
+      gen.text(
         preferencecompany['branch_name'].toString(),
         styles: const PosStyles(bold: true, align: PosAlign.center),
       ),
@@ -128,15 +135,6 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
         styles: const PosStyles(bold: true, align: PosAlign.center),
       ),
     );
-    printer.add(gen.feed(1));
-    printer.add(
-      gen.text(
-        salesinvoice['savings_cash_mutation_date'].toString(),
-        styles: const PosStyles(bold: true, align: PosAlign.right),
-      ),
-      
-    );
-    
     
     printer.add(gen.feed(1));
 
@@ -175,7 +173,7 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savingdata']['savings_name'],
+          text: salesinvoice['savings']['savings_name'],
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -222,13 +220,32 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savings_account_last_balance'],
+          text: salesinvoice['savingsaccount']['savings_account_last_balance'] != 0
+              ? CurrencyFormat.convertToIdrwithoutSymbol(
+              double.parse(salesinvoice['savingsaccount']['savings_account_last_balance']), 2)
+              : "0",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
       ]),
     );
-    
+
+      printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: username,
+          width: 6,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+        PosColumn(
+          text:  salesinvoice['savings_cash_mutation_date'].toString(),
+          styles: const PosStyles(bold: true, align: PosAlign.right),
+          width: 6,
+        ),
+      ]),
+    );
     
     printer.add(gen.feed(3));
     await printer.printData(device);
@@ -413,6 +430,8 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
         hideLoaderDialog(context);
         salesinvoice = response.data['data'];
         preferencecompany = response.data['preferencecompany'];
+        company = response.data['company'];
+
         //Messsage
         //SettingsPage
       }
