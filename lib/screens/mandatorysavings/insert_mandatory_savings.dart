@@ -243,6 +243,7 @@ calculateTotal() {
                                     // widget.byMandatorySavings['member_mandatory_savings'] = int.tryParse(text) ?? 0;
                                     setState(() {
                                     savingsTextController;
+                                    
                                   });
                                   },
                                   decoration: InputDecoration(
