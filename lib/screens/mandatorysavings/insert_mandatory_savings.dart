@@ -78,7 +78,7 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
     
     
     
-    savingsTextController.text = CurrencyFormat.convertToIdr(double.parse(widget.byMandatorySavings['member_mandatory_savings']), 0).toString();
+    savingsTextController.text = CurrencyFormat.convertToIdr(double.parse(widget.byMandatorySavings['member_mandatory_savings_last_balance']), 0).toString();
     // savingsTextController.text = double.parse(widget.byMandatorySavings['member_mandatory_savings']).toString();
 
 
@@ -87,6 +87,7 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
 
       savingsTextController.addListener(onValueChanged);
       _textEditingController.addListener(onValueChanged);
+      onValueChanged();
 
   }
 
@@ -103,9 +104,9 @@ void onValueChanged() {
 
 calculateTotal() {
   try {
-    num savingsValue = double.parse(widget.byMandatorySavings['member_mandatory_savings']);
+    num savingsValue = double.parse(widget.byMandatorySavings['member_mandatory_savings_last_balance']);
     int integerValue = savingsValue.toInt();
-    widget.byMandatorySavings['member_mandatory_savings'] = integerValue.toString();
+    widget.byMandatorySavings['member_mandatory_savings_last_balance'] = integerValue.toString();
     
     return   member_mandatory_savings_last_balance + savingsValue;
   } catch (e) {
@@ -359,8 +360,8 @@ calculateTotal() {
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.MANDATORYSAVINGS+member_id,
         data: {
-          'member_mandatory_savings': double.parse(resultController.text),
-          'member_mandatory_savings_last_balance': member_mandatory_savings_last_balance,
+          'member_mandatory_savings': member_mandatory_savings_last_balance,
+          'member_mandatory_savings_last_balance':  double.parse(resultController.text),
           'user_id': user_id,
           'member_id': member_id
         },
