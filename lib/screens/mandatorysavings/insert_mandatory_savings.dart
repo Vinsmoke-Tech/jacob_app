@@ -44,11 +44,9 @@ class _MandatorySavingsState extends State<MandatorySavings> {
   num member_mandatory_savings_last_balance= 0;
   num total = 0;
   num subtotal = 0;
-  num saldoController = 0;
 
-
-
-
+  late num SaldoValue;
+  late num SetorValue;
 
 
 // TextEditingController outputController = TextEditingController();
@@ -61,10 +59,11 @@ TextEditingController _textEditingController = TextEditingController();
 TextEditingController savingsTextController = TextEditingController(text: 0.toString());
 TextEditingController resultController = TextEditingController();
 TextEditingController HasilTextController = TextEditingController(text: 0.toString());
+TextEditingController setorController = TextEditingController();
+TextEditingController saldoController = TextEditingController();
 
 
-
-    @override
+  @override
   void initState() {
     super.initState();
     myFocusNode = FocusNode();
@@ -77,7 +76,8 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
     member_id = widget.byMandatorySavings[widget.data].toString();
     
     
-    
+    SaldoValue = double.parse(widget.byMandatorySavings['member_mandatory_savings_last_balance']);
+    SetorValue = member_mandatory_savings_last_balance;
     savingsTextController.text = CurrencyFormat.convertToIdr(double.parse(widget.byMandatorySavings['member_mandatory_savings_last_balance']), 0).toString();
     // savingsTextController.text = double.parse(widget.byMandatorySavings['member_mandatory_savings']).toString();
 
@@ -85,14 +85,44 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
       resultController.text = calculateTotal().toString();
       HasilTextController.text = calculateTotal().toString();
 
-      savingsTextController.addListener(onValueChanged);
-      _textEditingController.addListener(onValueChanged);
-      onValueChanged();
-
+      savingsTextController.addListener(onSaldoValueChanged);
+      setorController.addListener(onSetorValueChanged);
+      onValueChanged(total);
   }
 
+  void onSaldoValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String saldoText = saldoController.text; // Remove 'Rp' and commas
+  print('Extracted saldoText: $saldoText'); // Add this line to check the extracted text
 
-void onValueChanged() {
+  try {
+    SaldoValue = double.parse(saldoText);
+    
+    num total = calculateTotal();
+    onValueChanged(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
+  void onSetorValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String setorText = setorController.text; // Remove 'Rp' and commas
+  print('Extracted setorText: $setorText'); // Add this line to check the extracted text
+
+  try {
+    SetorValue = double.parse(setorText);
+    
+    num total = calculateTotal();
+    onValueChanged(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
+void onValueChanged(total) {
   num total = calculateTotal();
   // Gunakan nilai total untuk memperbarui UI, misalnya:
   setState(() {
@@ -104,14 +134,14 @@ void onValueChanged() {
 
 calculateTotal() {
   try {
-    num savingsValue = double.parse(widget.byMandatorySavings['member_mandatory_savings_last_balance']);
-    int integerValue = savingsValue.toInt();
-    widget.byMandatorySavings['member_mandatory_savings_last_balance'] = integerValue.toString();
+    // num savingsValue = double.parse(widget.byMandatorySavings['member_mandatory_savings_last_balance']);
+    // int integerValue = savingsValue.toInt();
+    // widget.byMandatorySavings['member_mandatory_savings_last_balance'] = integerValue.toString();
     
-    return   member_mandatory_savings_last_balance + savingsValue;
+    return   SetorValue + SaldoValue;
   } catch (e) {
     // Handle parsing error, return default value or show an error message
-    return member_mandatory_savings_last_balance; // Return default value or handle error
+    return SetorValue; // Return default value or handle error
   }
 }
 
@@ -243,8 +273,7 @@ calculateTotal() {
                                   onChanged: (text) {
                                     // widget.byMandatorySavings['member_mandatory_savings'] = int.tryParse(text) ?? 0;
                                     setState(() {
-                                    savingsTextController;
-                                    
+                                    member_mandatory_savings = int.parse(text);
                                   });
                                   },
                                   decoration: InputDecoration(
@@ -271,8 +300,8 @@ calculateTotal() {
                             BorderRadius.all(Radius.circular(25).r),
                             color: Colors.grey[200],
                           ),
-
                             child: TextFormField(
+                              controller: setorController,
                               keyboardType: TextInputType.number,
                               onChanged: (text) {
                                   setState(() {
@@ -360,7 +389,7 @@ calculateTotal() {
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.MANDATORYSAVINGS+member_id,
         data: {
-          'member_mandatory_savings': member_mandatory_savings_last_balance,
+          'member_mandatory_savings': double.parse(setorController.text.replaceAll(',', '')),
           'member_mandatory_savings_last_balance':  double.parse(resultController.text),
           'user_id': user_id,
           'member_id': member_id
