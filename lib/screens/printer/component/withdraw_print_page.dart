@@ -38,7 +38,7 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
   List<ScanResult>? filteredScanResult;
   int? navbar_index;
   var salesinvoice;
-  var salesinvoiceitem;
+  var company;
   var preferencecompany;
   var expenditure;
   int capital_money_total = 0;
@@ -117,6 +117,13 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
     // printer.add(gen.qrcode('www.ciptasolutindo.id'));
     printer.add(
       gen.text(
+        company['company_name'].toString(),
+        styles: const PosStyles(bold: true, align: PosAlign.center),
+      ),
+    );
+
+    printer.add(
+      gen.text(
         preferencecompany['branch_name'].toString(),
         styles: const PosStyles(bold: true, align: PosAlign.center),
       ),
@@ -128,15 +135,6 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
         styles: const PosStyles(bold: true, align: PosAlign.center),
       ),
     );
-    printer.add(gen.feed(1));
-    printer.add(
-      gen.text(
-        salesinvoice['savings_cash_mutation_date'].toString(),
-        styles: const PosStyles(bold: true, align: PosAlign.right),
-      ),
-      
-    );
-    
     
     printer.add(gen.feed(1));
 
@@ -154,6 +152,28 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
       gen.row([
         PosColumn(
           text: salesinvoice['member']['member_name'],
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+        printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: "Jenis Simpanan :",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: salesinvoice['savings']['savings_name'],
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -190,7 +210,7 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: "Tanggal Tarik Tunai :",
+          text: "Saldo :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -200,13 +220,32 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savings_cash_mutation_date'],
+          text: salesinvoice['savingsaccount']['savings_account_last_balance'] != 0
+              ? CurrencyFormat.convertToIdrwithoutSymbol(
+              double.parse(salesinvoice['savingsaccount']['savings_account_last_balance']), 2)
+              : "0",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
       ]),
     );
-    
+
+      printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: username,
+          width: 6,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+        PosColumn(
+          text:  salesinvoice['savings_cash_mutation_date'].toString(),
+          styles: const PosStyles(bold: true, align: PosAlign.right),
+          width: 6,
+        ),
+      ]),
+    );
     
     printer.add(gen.feed(3));
     await printer.printData(device);
@@ -391,6 +430,8 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
         hideLoaderDialog(context);
         salesinvoice = response.data['data'];
         preferencecompany = response.data['preferencecompany'];
+        company = response.data['company'];
+
         //Messsage
         //SettingsPage
       }
