@@ -109,7 +109,8 @@ void onBungaValueChanged() {
   print('Extracted bungaText: $bungaText'); // Add this line to check the extracted text
 
   try {
-    
+
+    //logic null then 0
     if(bungaText.isEmpty){
       BungaValue = 0;
     }else{
