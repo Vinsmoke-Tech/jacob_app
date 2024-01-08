@@ -356,8 +356,10 @@ num calculateTotal() {
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
                                 setState(() {
-                                  credits_payment_fine = text.isEmpty ? 0 : int.parse(text);
-                                });
+          // Jika teks kosong, atur nilai credits_payment_fine ke 0
+          // Jika teks dihapus manual dan tidak ada karakter, atur nilai ke 0
+          credits_payment_fine = (text.isEmpty || text.trim() == "") ? 0 : int.parse(text);
+        });
                               },
                       decoration: InputDecoration(
                         border: InputBorder.none,
