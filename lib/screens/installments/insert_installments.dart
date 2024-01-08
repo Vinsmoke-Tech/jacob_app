@@ -58,11 +58,11 @@ class _InsertInstallmentsState extends State<InsertInstallments> {
 
 
 TextEditingController saldoController = TextEditingController();
-TextEditingController angsuranController = TextEditingController();
-TextEditingController bungaController = TextEditingController();
+TextEditingController angsuranController = TextEditingController(text: '0');
+TextEditingController bungaController = TextEditingController(text: '0');
 TextEditingController dendaController = TextEditingController(text: '0');
-TextEditingController lainController = TextEditingController();
-TextEditingController simpwajibController = TextEditingController();
+TextEditingController lainController = TextEditingController(text: '0');
+TextEditingController simpwajibController = TextEditingController(text: '0');
 
 TextEditingController resultController = TextEditingController();
 TextEditingController HasilTextController = TextEditingController(text: 0.toString());
@@ -332,7 +332,7 @@ num calculateTotal() {
                       // initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_principal_amount']), 0).toString(),
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
-                                credits_account_principal_amount = int.parse(text);
+                                credits_account_principal_amount = text.isEmpty ? 0 : int.parse(text);
                               },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -367,7 +367,7 @@ num calculateTotal() {
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
                               setState(() {
-                                credits_account_interest_amount = int.parse(text);
+                                credits_account_interest_amount = text.isEmpty ? 0 : int.parse(text);
                               });
 
                               },
@@ -430,7 +430,7 @@ num calculateTotal() {
                       controller: lainController,
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
-                                credits_others_income = int.parse(text);
+                                credits_others_income = text.isEmpty ? 0 : int.parse(text);
                               },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -455,7 +455,7 @@ num calculateTotal() {
                       readOnly: false,
                       controller: simpwajibController,
                       onChanged: (text) {
-                                member_mandatory_savings = int.parse(text);
+                                member_mandatory_savings = text.isEmpty ? 0 : int.parse(text);
                               },
                       decoration: InputDecoration(
                         border: InputBorder.none,
