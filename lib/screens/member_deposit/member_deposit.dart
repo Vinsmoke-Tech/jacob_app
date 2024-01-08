@@ -37,6 +37,7 @@ class _MemberDepositState extends State<MemberDeposit> {
   String memberid ='';
   late String savings_account_id;
   String savings_cash_mutation_amount= '';
+
   var memberidJson = [];
 
 
@@ -72,204 +73,234 @@ TextEditingController saldoController = TextEditingController();
         title: const Text('Setor Tunai',style: TextStyle(color: white),),
         backgroundColor: transparentBrown,
       ),
-      body: Container(
-        padding: EdgeInsets.all(16.r),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-                        padding: EdgeInsets.only(left: 16.w),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25).r),
-                          color: Colors.grey[200],  
-                        ),
-                        child: TextFormField(
-                          readOnly: true,
-                          initialValue: widget.bySaving['member']['member_no'],
-                          
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: 'No Anggota',
-                            labelStyle: TextStyle(
-                                color: myFocusNodeFive.hasFocus
-                                    ? Colors.black
-                                    : blue
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                          padding: EdgeInsets.only(left: 16.w),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(25).r),
+                            color: Colors.grey[200],  
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            initialValue: widget.bySaving['member']['member_no'],
+                            
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'No Anggota',
+                              labelStyle: TextStyle(
+                                  color: myFocusNodeFive.hasFocus
+                                      ? Colors.black
+                                      : blue
+                              ),
                             ),
                           ),
                         ),
-                      ),
-            SizedBox(height: 16.h),
-
-            Container(
-                        padding: EdgeInsets.only(left: 16.w),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25.r)),
-                          color: Colors.grey[200],
-                        ),
-                        child: TextFormField(
-                          readOnly: true,
-                          initialValue: widget.bySaving['member']['member_name'],
-                          
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: 'Nama Anggota',
-                            labelStyle: TextStyle(
-                                color: myFocusNodeFive.hasFocus
-                                    ? Colors.black
-                                    : blue
+              SizedBox(height: 16.h),
+        
+              Container(
+                          padding: EdgeInsets.only(left: 16.w),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(25.r)),
+                            color: Colors.grey[200],
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            initialValue: widget.bySaving['member']['member_name'],
+                            
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'Nama Anggota',
+                              labelStyle: TextStyle(
+                                  color: myFocusNodeFive.hasFocus
+                                      ? Colors.black
+                                      : blue
+                              ),
                             ),
                           ),
                         ),
-                      ),
-            SizedBox(height: 16.h),
-                      
-            Container(
-                        padding: EdgeInsets.only(left: 16.w),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25).r),
-                          color: Colors.grey[200],
-                        ),
-                        child: TextFormField(
-                          readOnly: true,
-                          initialValue: widget.bySaving['member']['member_address_now'],
-                          
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: 'Alamat',
-                            labelStyle: TextStyle(
-                                color: myFocusNodeFive.hasFocus
-                                    ? Colors.black
-                                    : blue
+              SizedBox(height: 16.h),
+                        
+              Container(
+                          padding: EdgeInsets.only(left: 16.w),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(25).r),
+                            color: Colors.grey[200],
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            initialValue: widget.bySaving['member']['member_address_now'],
+                            
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'Alamat',
+                              labelStyle: TextStyle(
+                                  color: myFocusNodeFive.hasFocus
+                                      ? Colors.black
+                                      : blue
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 16.h),
-            Container(
-                        padding: EdgeInsets.only(left: 16.w),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25.r)),
-                          color: Colors.grey[200],
-                        ),
-                        child: TextFormField(
-                          readOnly: true,
-                          initialValue: widget.bySaving['member']['member_identity_no'],
-                          
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: 'No Anggota',
-                            labelStyle: TextStyle(
-                                color: myFocusNodeFive.hasFocus
-                                    ? Colors.black
-                                    : blue
+                        SizedBox(height: 16.h),
+              Container(
+                          padding: EdgeInsets.only(left: 16.w),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(25.r)),
+                            color: Colors.grey[200],
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            initialValue: widget.bySaving['member']['member_identity_no'],
+                            
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'No KTP',
+                              labelStyle: TextStyle(
+                                  color: myFocusNodeFive.hasFocus
+                                      ? Colors.black
+                                      : blue
+                              ),
                             ),
                           ),
                         ),
-                      ),
-
-                      SizedBox(height: 16.h),
-            Container(
-                        padding: EdgeInsets.only(left: 16.w),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25.r)),
-                          color: Colors.grey[200],
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                readOnly: true,
-                                controller: saldoController,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  labelText: 'Saldo Akhir',
-                                  labelStyle: TextStyle(
-                                      color: myFocusNodeFive.hasFocus
-                                          ? Colors.black
-                                          : blue
+        
+                        SizedBox(height: 16.h),
+              Container(
+                          padding: EdgeInsets.only(left: 16.w),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(25.r)),
+                            color: Colors.grey[200],
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  readOnly: true,
+                                  controller: saldoController,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    labelText: 'Saldo Akhir',
+                                    labelStyle: TextStyle(
+                                        color: myFocusNodeFive.hasFocus
+                                            ? Colors.black
+                                            : blue
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    SizedBox(height: 16.h),
-            Container(
+                      SizedBox(height: 16.h),
+              Container(
+                          padding: EdgeInsets.only(left: 16.w),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(25).r),
+                            color: Colors.grey[200],
+                          ),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            onChanged: (text) {
+                                  savings_cash_mutation_amount = text;
+                                },
+                            readOnly: false,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'Jumlah (Rp)',
+                              labelStyle: TextStyle(
+                                  color: myFocusNodeFive.hasFocus
+                                      ? Colors.black
+                                      : blue
+                                      
+                              ),
+                            ),
+                          ),
+                        ),
+        
+                      SizedBox(height: 16.h),
+              Container(
                         padding: EdgeInsets.only(left: 16.w),
                         decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25).r),
+                          borderRadius: BorderRadius.all(Radius.circular(25).r),
                           color: Colors.grey[200],
                         ),
                         child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          onChanged: (text) {
-                                savings_cash_mutation_amount = text;
-                              },
+                        onChanged: (text) {
+                                  // savings_account_id = '1';
+                                },
                           readOnly: false,
+                          maxLines: null, // Set to null for a multi-line input
+                          keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Jumlah (Rp)',
+                            labelText: 'Biaya Adm',
                             labelStyle: TextStyle(
-                                color: myFocusNodeFive.hasFocus
-                                    ? Colors.black
-                                    : blue
-                                    
+                              color: myFocusNodeFive.hasFocus
+                                      ? Colors.black
+                                      : blue
                             ),
                           ),
                         ),
                       ),
 
-            //         SizedBox(height: 16.h),
-            // Container(
-            //           padding: EdgeInsets.only(left: 16.w),
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.all(Radius.circular(25).r),
-            //             color: Colors.grey[200],
-            //           ),
-            //           child: TextFormField(
-            //           onChanged: (text) {
-            //                     savings_account_id = '1';
-            //                   },
-            //             readOnly: false,
-            //             maxLines: null, // Set to null for a multi-line input
-            //             keyboardType: TextInputType.multiline,
-            //             decoration: InputDecoration(
-            //               border: InputBorder.none,
-            //               labelText: 'Keterangan',
-            //               labelStyle: TextStyle(
-            //                 color: myFocusNodeFive.hasFocus
-            //                         ? Colors.black
-            //                         : blue
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-
-            SizedBox(height: 16.h),
-            ElevatedButton(
-              onPressed: () {
-                // Process to send data to the server
-                postDataToServer(context,savings_account_id);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: transparentBrown,
-                foregroundColor: white,
-                elevation: 7, // Warna latar belakang tombol
-                shadowColor: Colors.amber,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.r),
+                      SizedBox(height: 16.h),
+              Container(
+                  padding: EdgeInsets.only(left: 16.w),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(25.r)),
+                    color: Colors.grey[200],
+                    
+                  ),
+                    child: TextFormField(
+                      // controller: HasilTextController,
+                      readOnly: true,
+                      keyboardType: TextInputType.number,
+                                onChanged: (text) {
+                                    setState(() {
+                                    // calculateTotal();
+                                  });
+                                },
+                                  
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: 'Total',
+                      labelStyle: TextStyle(
+                        color: myFocusNodeFive.hasFocus ? Colors.black : blue,
+                    ),
+                  ),
                 ),
               ),
-              child: Text('SIMPAN', style: TextStyle(fontSize: 18.sp)),
-            ),
-          ],
+        
+              SizedBox(height: 16.h),
+              ElevatedButton(
+                onPressed: () {
+                  // Process to send data to the server
+                  postDataToServer(context,savings_account_id);
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: transparentBrown,
+                  foregroundColor: white,
+                  elevation: 7, // Warna latar belakang tombol
+                  shadowColor: Colors.amber,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                ),
+                child: Text('SIMPAN', style: TextStyle(fontSize: 18.sp)),
+              ),
+            ],
+          ),
         ),
       ),
     );
