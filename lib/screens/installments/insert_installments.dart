@@ -175,7 +175,12 @@ void onSimpWajibValueChanged() {
   print('Extracted wajibText: $wajibText'); // Add this line to check the extracted text
 
   try {
-    WajibValue = double.parse(wajibText);
+
+    if(wajibText.isEmpty){
+      WajibValue = 0;
+    }else{
+      WajibValue = double.parse(wajibText);
+    }
     
     num total = calculateTotal();
     updateTotalValue(total);
