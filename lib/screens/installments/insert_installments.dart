@@ -109,7 +109,12 @@ void onBungaValueChanged() {
   print('Extracted bungaText: $bungaText'); // Add this line to check the extracted text
 
   try {
-    BungaValue = double.parse(bungaText);
+    
+    if(bungaText.isEmpty){
+      BungaValue = 0;
+    }else{
+      BungaValue = double.parse(bungaText);
+    }
     
     num total = calculateTotal();
     updateTotalValue(total);
@@ -125,7 +130,12 @@ void onDendaValueChanged() {
   print('Extracted dendaText: $dendaText'); // Add this line to check the extracted text
 
   try {
-    DendaValue = double.parse(dendaText);
+
+    if (dendaText.isEmpty) {
+      DendaValue = 0;
+    } else {
+      DendaValue = double.parse(dendaText);
+    }
     
     num total = calculateTotal();
     updateTotalValue(total);
@@ -356,10 +366,8 @@ num calculateTotal() {
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
                                 setState(() {
-          // Jika teks kosong, atur nilai credits_payment_fine ke 0
-          // Jika teks dihapus manual dan tidak ada karakter, atur nilai ke 0
-          credits_payment_fine = (text.isEmpty || text.trim() == "") ? 0 : int.parse(text);
-        });
+                                  credits_payment_fine = text.isEmpty ? 0 : int.parse(text);
+                                });
                               },
                       decoration: InputDecoration(
                         border: InputBorder.none,
