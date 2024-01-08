@@ -175,7 +175,6 @@ void onSimpWajibValueChanged() {
   print('Extracted wajibText: $wajibText'); // Add this line to check the extracted text
 
   try {
-    
     //logic null then 0
     if(wajibText.isEmpty){
       WajibValue = 0;
@@ -195,7 +194,7 @@ void onSimpWajibValueChanged() {
 void onAngsuranValueChanged() {
   // Update AngsuranPokok when the value in the text field changes
   AngsuranPokok = int.parse(angsuranController.text.replaceAll(',', '')); // Remove commas before parsing
-
+  
   num total = calculateTotal();
   updateTotalValue(total);
 }
