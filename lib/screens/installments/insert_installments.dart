@@ -109,7 +109,6 @@ void onBungaValueChanged() {
   print('Extracted bungaText: $bungaText'); // Add this line to check the extracted text
 
   try {
-
     //logic null then 0
     if(bungaText.isEmpty){ 
       BungaValue = 0;
@@ -132,13 +131,13 @@ void onDendaValueChanged() {
   print('Extracted dendaText: $dendaText'); // Add this line to check the extracted text
 
   try {
-
     //logic null then 0
     if (dendaText.isEmpty) {
       DendaValue = 0;
     } else {
       DendaValue = double.parse(dendaText);
     }
+    
     
     num total = calculateTotal();
     updateTotalValue(total);
@@ -154,7 +153,12 @@ void onLainValueChanged() {
   print('Extracted lainText: $lainText'); // Add this line to check the extracted text
 
   try {
-    LainValue = double.parse(lainText);
+    //logic null then 0\
+    if(lainText.isEmpty){
+      LainValue = 0;
+    }else{
+      LainValue = double.parse(lainText);
+    }
     
     num total = calculateTotal();
     updateTotalValue(total);
