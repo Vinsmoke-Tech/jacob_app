@@ -132,6 +132,7 @@ void onDendaValueChanged() {
 
   try {
 
+    //logic null then 0
     if (dendaText.isEmpty) {
       DendaValue = 0;
     } else {
