@@ -46,17 +46,20 @@ class _InsertInstallmentsState extends State<InsertInstallments> {
   num member_mandatory_savings = 0;
 
   late num AngsuranPokok;
-late num BungaValue;
-late num DendaValue;
-late num LainValue;
-late num WajibValue;
+  num total = 0;
+  late num BungaValue;
+  late num DendaValue;
+  late num LainValue;
+  late num WajibValue;
+  
+
 
 
 
 TextEditingController saldoController = TextEditingController();
 TextEditingController angsuranController = TextEditingController();
 TextEditingController bungaController = TextEditingController();
-TextEditingController dendaController = TextEditingController();
+TextEditingController dendaController = TextEditingController(text: '0');
 TextEditingController lainController = TextEditingController();
 TextEditingController simpwajibController = TextEditingController();
 
@@ -94,9 +97,9 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
       dendaController.addListener(onDendaValueChanged);
       lainController.addListener(onLainValueChanged);
       simpwajibController.addListener(onSimpWajibValueChanged);
-
+      
       // onBungaValueChanged();
-      // updateTotalValue();
+      updateTotalValue(total);
 
   }
 
@@ -352,7 +355,9 @@ num calculateTotal() {
                       controller: dendaController,
                       keyboardType: TextInputType.number,
                           onChanged: (text) {
-                                credits_payment_fine = int.parse(text);
+                                setState(() {
+                                  credits_payment_fine = text.isEmpty ? 0 : int.parse(text);
+                                });
                               },
                       decoration: InputDecoration(
                         border: InputBorder.none,
