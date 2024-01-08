@@ -416,6 +416,7 @@ calculateTotal() {
         String errorMessage = e.response?.data['message'];
         
       } else {
+        //error
         print(e);
         _showDialog(context, 'Terjadi kesalahan. Silakan coba lagi.');
       }
