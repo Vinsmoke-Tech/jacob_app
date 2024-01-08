@@ -51,6 +51,7 @@ class _InsertInstallmentsState extends State<InsertInstallments> {
   late num DendaValue;
   late num LainValue;
   late num WajibValue;
+  late num AngsuranValue;
   
 
 
@@ -193,10 +194,25 @@ void onSimpWajibValueChanged() {
 
 void onAngsuranValueChanged() {
   // Update AngsuranPokok when the value in the text field changes
-  AngsuranPokok = int.parse(angsuranController.text.replaceAll(',', '')); // Remove commas before parsing
-  
-  num total = calculateTotal();
-  updateTotalValue(total);
+  String angsuranText = angsuranController.text; // Remove commas before parsing
+
+  print('Extracted wajibText: $angsuranText');
+  try{
+    //logic null then 0
+    if(angsuranText.isEmpty){
+      AngsuranValue = 0;
+    }else{
+      AngsuranValue = double.parse(angsuranText);
+    }
+
+    //total SUM
+    num total = calculateTotal();
+    updateTotalValue(total);
+  }catch(e){
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+
 }
 
 void updateTotalValue(num total) {
