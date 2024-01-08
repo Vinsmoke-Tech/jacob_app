@@ -111,12 +111,13 @@ void onBungaValueChanged() {
   try {
 
     //logic null then 0
-    if(bungaText.isEmpty){
+    if(bungaText.isEmpty){ 
       BungaValue = 0;
     }else{
       BungaValue = double.parse(bungaText);
     }
     
+    //total SUM
     num total = calculateTotal();
     updateTotalValue(total);
   } catch (e) {
