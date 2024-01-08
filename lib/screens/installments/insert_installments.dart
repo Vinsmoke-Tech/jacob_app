@@ -138,7 +138,7 @@ void onDendaValueChanged() {
       DendaValue = double.parse(dendaText);
     }
     
-    
+    //total SUM
     num total = calculateTotal();
     updateTotalValue(total);
   } catch (e) {
@@ -153,13 +153,14 @@ void onLainValueChanged() {
   print('Extracted lainText: $lainText'); // Add this line to check the extracted text
 
   try {
-    //logic null then 0\
+    //logic null then 0
     if(lainText.isEmpty){
       LainValue = 0;
     }else{
       LainValue = double.parse(lainText);
     }
-    
+
+    //total SUM
     num total = calculateTotal();
     updateTotalValue(total);
   } catch (e) {
