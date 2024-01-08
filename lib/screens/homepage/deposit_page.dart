@@ -97,6 +97,7 @@ TextEditingController _controller = TextEditingController();
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('savings_cash_mutation_id', savings_cash_mutation_id.toString());
+    //print status variabel local
     prefs.setString('print_status', "0");
 
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => DepositPrintPage()));
