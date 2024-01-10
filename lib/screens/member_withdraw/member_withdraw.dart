@@ -6,7 +6,7 @@ import 'package:jacob_app/screens/homepage/withdraw_page.dart';
 import 'package:jacob_app/screens/navbar/bottom_navbar.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
-import 'package:jacob_app/utility/currency_format.dart';
+import 'package:jacob_app/utility/currency_format2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -36,34 +36,110 @@ class _MemberWithdrawState extends State<MemberWithdraw> {
   String savingsaccount ='';
   String memberid ='';
   late String savings_account_id;
-  String savings_cash_mutation_amount= '';
   var memberidJson = [];
 
+  num savings_cash_mutation_amount= 0;
+  num savings_account_last_balance= 0;
+  num savings_cash_mutation_amount_adm= 0;
+
+  num total = 0;
+  late num SetorValue;
+  late num SaldoValue;
+  late num BiayaAdminValue;
 
 
-TextEditingController saldoController = TextEditingController();
+TextEditingController saldoController     = TextEditingController();
+TextEditingController setorController   = TextEditingController(text: '0');
+TextEditingController biayaadmController  = TextEditingController(text: '0');
+
+// hasil yang disimpan di database
+TextEditingController resultController    = TextEditingController();
+
+// hasil yang ditampilkan di textformfield
+TextEditingController HasilTextController = TextEditingController(text: 0.toString());
+
+
     @override
   void initState() {
-    super.initState();
-    myFocusNode = FocusNode();
-    myFocusNodeTwo = FocusNode();
-    myFocusNodeThree = FocusNode();
-    myFocusNodeFour = FocusNode();
-    myFocusNodeFive = FocusNode();
-    myFocusNodeSix = FocusNode();
-    obscureText = true;
-    savings_account_id = widget.bySaving[widget.data].toString();
+      super.initState();
+      myFocusNode         = FocusNode();
+      myFocusNodeTwo      = FocusNode();
+      myFocusNodeThree    = FocusNode();
+      myFocusNodeFour     = FocusNode();
+      myFocusNodeFive     = FocusNode();
+      myFocusNodeSix      = FocusNode();
+      obscureText         = true;
+      savings_account_id  = widget.bySaving[widget.data].toString();
 
+      SaldoValue = double.parse(widget.bySaving['savings_account_last_balance']);
+      SetorValue = savings_cash_mutation_amount;
 
-  // Assuming widget.bySaving['savings_account_last_balance'] is a String
-  String formattedSaldo = CurrencyFormat.convertToIdr(
-    double.parse(widget.bySaving['savings_account_last_balance']),
-    0,
-    initialValue: widget.bySaving['savings_account_last_balance'],
-  );
-  saldoController.text = formattedSaldo;
+      saldoController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['savings_account_last_balance']), 0).toString();
+
+        resultController.text     = calculateTotal().toString();
+        HasilTextController.text  = calculateTotal().toString();
+
+        setorController.addListener(onSetorValueChanged);
+        saldoController.addListener(onSaldoValueChanged);
+        updateTotalValue(total);
   }
 
+void onSetorValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String setorText = setorController.text; // Remove 'Rp' and commas
+  print('Extracted setorText: $setorText'); // Add this line to check the extracted text
+
+  try {
+    //logic null then 0
+    if (setorText.isEmpty) {
+      SetorValue = 0;
+    } else {
+      SetorValue = double.parse(setorText);
+    }
+    
+    //total SUM
+    num total = calculateTotal();
+    updateTotalValue(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
+void onSaldoValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String saldoText = saldoController.text; // Remove 'Rp' and commas
+  print('Extracted saldoText: $saldoText'); // Add this line to check the extracted text
+
+  try {
+    //logic null then 0
+    if (saldoText.isEmpty) {
+      SaldoValue = 0;
+    } else {
+      SaldoValue = double.parse(saldoText);
+    }
+    
+    //total SUM
+    num total = calculateTotal();
+    updateTotalValue(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
+void updateTotalValue(num total) {
+  num total = calculateTotal();
+  setState(() {
+    String formattedTotal = CurrencyFormat.convertToIdr(total.toInt(), 0);
+    HasilTextController.text = formattedTotal;
+    resultController.text = total.toString();
+  });
+}
+
+num calculateTotal() {
+  return SaldoValue + SetorValue;
+}
 
   @override
   Widget build(BuildContext context) {
