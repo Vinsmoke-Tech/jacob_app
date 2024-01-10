@@ -59,14 +59,14 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
     @override
   void initState() {
     super.initState();
-    myFocusNode = FocusNode();
-    myFocusNodeTwo = FocusNode();
-    myFocusNodeThree = FocusNode();
-    myFocusNodeFour = FocusNode();
-    myFocusNodeFive = FocusNode();
-    myFocusNodeSix = FocusNode();
-    obscureText = true;
-    savings_account_id = widget.bySaving[widget.data].toString();
+    myFocusNode         = FocusNode();
+    myFocusNodeTwo      = FocusNode();
+    myFocusNodeThree    = FocusNode();
+    myFocusNodeFour     = FocusNode();
+    myFocusNodeFive     = FocusNode();
+    myFocusNodeSix      = FocusNode();
+    obscureText         = true;
+    savings_account_id  = widget.bySaving[widget.data].toString();
 
     SaldoValue = double.parse(widget.bySaving['savings_account_last_balance']);
     SetorValue = savings_cash_mutation_amount;
@@ -79,7 +79,6 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
       setorController.addListener(onSetorValueChanged);
       saldoController.addListener(onSaldoValueChanged);
       updateTotalValue(total);
-
   }
 
 void onSetorValueChanged() {
