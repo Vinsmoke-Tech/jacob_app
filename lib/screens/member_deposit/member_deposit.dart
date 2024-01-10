@@ -36,9 +36,14 @@ class _MemberDepositState extends State<MemberDeposit> {
   String user_id = '';
   late String savings_account_id;
   
-  String savings_cash_mutation_amount= '';
+  num savings_cash_mutation_amount= 0;
+  num savings_account_last_balance= 0;
+  num savings_cash_mutation_amount_adm= 0;
+
+
   num total = 0;
   late num SetorValue;
+  late num SaldoValue;
   late num BiayaAdminValue;
 
 TextEditingController saldoController     = TextEditingController();
@@ -63,10 +68,18 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
     obscureText = true;
     savings_account_id = widget.bySaving[widget.data].toString();
 
-    SetorValue = double.parse(widget.bySaving['savings_account_last_balance']);
-
+    SaldoValue = double.parse(widget.bySaving['savings_account_last_balance']);
+    SetorValue = savings_cash_mutation_amount;
 
     saldoController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['savings_account_last_balance']), 0).toString();
+
+      resultController.text     = calculateTotal().toString();
+      HasilTextController.text  = calculateTotal().toString();
+
+      setorController.addListener(onSetorValueChanged);
+      saldoController.addListener(onSaldoValueChanged);
+      updateTotalValue(total);
+
   }
 
 void onSetorValueChanged() {
@@ -91,6 +104,28 @@ void onSetorValueChanged() {
   }
 }
 
+void onSaldoValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String saldoText = saldoController.text; // Remove 'Rp' and commas
+  print('Extracted saldoText: $saldoText'); // Add this line to check the extracted text
+
+  try {
+    //logic null then 0
+    if (saldoText.isEmpty) {
+      SaldoValue = 0;
+    } else {
+      SaldoValue = double.parse(saldoText);
+    }
+    
+    //total SUM
+    num total = calculateTotal();
+    updateTotalValue(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
 void updateTotalValue(num total) {
   num total = calculateTotal();
   setState(() {
@@ -101,7 +136,7 @@ void updateTotalValue(num total) {
 }
 
 num calculateTotal() {
-  return AngsuranPokok + SetorValue;
+  return SaldoValue + SetorValue;
 }
 
 
@@ -226,6 +261,9 @@ num calculateTotal() {
                                 child: TextFormField(
                                   readOnly: true,
                                   controller: saldoController,
+                                  onChanged: (text) {
+                                      savings_account_last_balance  = text.isEmpty ? 0 : int.parse(text);
+                                    },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     labelText: 'Saldo Akhir',
@@ -251,8 +289,9 @@ num calculateTotal() {
                           ),
                           child: TextFormField(
                             keyboardType: TextInputType.number,
+                            controller: setorController,
                             onChanged: (text) {
-                                  savings_cash_mutation_amount = text;
+                                  savings_cash_mutation_amount  = text.isEmpty ? 0 : int.parse(text);
                                 },
                             readOnly: false,
                             decoration: InputDecoration(
@@ -276,12 +315,13 @@ num calculateTotal() {
                           color: Colors.grey[200],
                         ),
                         child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: biayaadmController,
                             onChanged: (text) {
-                                    // savings_account_id = '1';
+                                      savings_cash_mutation_amount_adm = text.isEmpty ? 0 : int.parse(text);
                                   },
                           readOnly: false,
                           maxLines: null, // Set to null for a multi-line input
-                          keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             labelText: 'Biaya Adm',
@@ -303,12 +343,12 @@ num calculateTotal() {
                     
                   ),
                     child: TextFormField(
-                      // controller: HasilTextController,
+                      controller: HasilTextController,
                       readOnly: true,
                       keyboardType: TextInputType.number,
                                 onChanged: (text) {
                                     setState(() {
-                                    // calculateTotal();
+                                    calculateTotal();
                                   });
                                 },
                                   
@@ -358,7 +398,8 @@ num calculateTotal() {
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.DEPOSITBYID+savings_account_id,
         data: {
-          'savings_cash_mutation_amount': savings_cash_mutation_amount,
+          'savings_cash_mutation_amount'      : savings_cash_mutation_amount,
+          'savings_cash_mutation_amount_adm'  : savings_cash_mutation_amount_adm,
           'user_id': user_id,
           'savings_account_id': savings_account_id
         },
