@@ -57,14 +57,17 @@ class _InsertInstallmentsState extends State<InsertInstallments> {
 
 
 
-TextEditingController saldoController = TextEditingController();
-TextEditingController angsuranController = TextEditingController(text: '0');
-TextEditingController bungaController = TextEditingController(text: '0');
-TextEditingController dendaController = TextEditingController(text: '0');
-TextEditingController lainController = TextEditingController(text: '0');
+TextEditingController saldoController     = TextEditingController();
+TextEditingController angsuranController  = TextEditingController(text: '0');
+TextEditingController bungaController     = TextEditingController(text: '0');
+TextEditingController dendaController     = TextEditingController(text: '0');
+TextEditingController lainController      = TextEditingController(text: '0');
 TextEditingController simpwajibController = TextEditingController(text: '0');
 
-TextEditingController resultController = TextEditingController();
+// hasil yang disimpan di database
+TextEditingController resultController    = TextEditingController();
+
+// hasil yang ditampilkan di textformfield
 TextEditingController HasilTextController = TextEditingController(text: 0.toString());
 
     @override
@@ -85,23 +88,18 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
     LainValue = credits_others_income;
     WajibValue = member_mandatory_savings;
 
-
-
     angsuranController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_principal_amount']), 0).toString();
-    bungaController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString();
+    bungaController.text    = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString();
 
-      resultController.text = calculateTotal().toString();
-      HasilTextController.text = calculateTotal().toString();
+      resultController.text     = calculateTotal().toString();
+      HasilTextController.text  = calculateTotal().toString();
 
       bungaController.addListener(onBungaValueChanged);
       angsuranController.addListener(onAngsuranValueChanged);
       dendaController.addListener(onDendaValueChanged);
       lainController.addListener(onLainValueChanged);
       simpwajibController.addListener(onSimpWajibValueChanged);
-      
-      // onBungaValueChanged();
       updateTotalValue(total);
-
   }
 
 void onBungaValueChanged() {
@@ -245,7 +243,7 @@ num calculateTotal() {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               
-              Row(
+            Row(
               children: <Widget>[
                 Expanded(
                   child: Container(
@@ -295,7 +293,7 @@ num calculateTotal() {
             ),
               SizedBox(height: 16.h),
         
-              Row(
+            Row(
               children: <Widget>[
                 Expanded(
                   child: Container(
@@ -528,7 +526,7 @@ num calculateTotal() {
 
   Future postDataToServer(BuildContext context,String credits_account_id) async {
     final prefs = await SharedPreferences.getInstance();
-      token = prefs.getString('token')!;
+    token       = prefs.getString('token')!;
     try {
       // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
       Response response;
@@ -594,4 +592,4 @@ num calculateTotal() {
       },
     );
   }
-  }
+}

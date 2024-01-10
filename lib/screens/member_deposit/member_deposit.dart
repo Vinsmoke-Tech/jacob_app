@@ -6,7 +6,7 @@ import 'package:jacob_app/screens/homepage/deposit_page.dart';
 import 'package:jacob_app/screens/navbar/bottom_navbar.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
-import 'package:jacob_app/utility/currency_format.dart';
+import 'package:jacob_app/utility/currency_format2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -31,18 +31,26 @@ class _MemberDepositState extends State<MemberDeposit> {
   late FocusNode myFocusNodeFive;
   late FocusNode myFocusNodeSix;
   late bool obscureText;
+
   String token = '';
   String user_id = '';
-  String savingsaccount ='';
-  String memberid ='';
   late String savings_account_id;
+  
   String savings_cash_mutation_amount= '';
+  num total = 0;
+  late num SetorValue;
+  late num BiayaAdminValue;
 
-  var memberidJson = [];
+TextEditingController saldoController     = TextEditingController();
+TextEditingController setorController   = TextEditingController(text: '0');
+TextEditingController biayaadmController  = TextEditingController(text: '0');
 
+// hasil yang disimpan di database
+TextEditingController resultController    = TextEditingController();
 
+// hasil yang ditampilkan di textformfield
+TextEditingController HasilTextController = TextEditingController(text: 0.toString());
 
-TextEditingController saldoController = TextEditingController();
     @override
   void initState() {
     super.initState();
@@ -55,15 +63,46 @@ TextEditingController saldoController = TextEditingController();
     obscureText = true;
     savings_account_id = widget.bySaving[widget.data].toString();
 
+    SetorValue = double.parse(widget.bySaving['savings_account_last_balance']);
 
-  // Assuming widget.bySaving['savings_account_last_balance'] is a String
-  String formattedSaldo = CurrencyFormat.convertToIdr(
-    double.parse(widget.bySaving['savings_account_last_balance']),
-    0,
-    initialValue: widget.bySaving['savings_account_last_balance'],
-  );
-  saldoController.text = formattedSaldo;
+
+    saldoController.text = CurrencyFormat.convertToIdr(double.parse(widget.bySaving['savings_account_last_balance']), 0).toString();
   }
+
+void onSetorValueChanged() {
+  // Extract the numeric value from the string and parse it into an integer
+  String setorText = setorController.text; // Remove 'Rp' and commas
+  print('Extracted setorText: $setorText'); // Add this line to check the extracted text
+
+  try {
+    //logic null then 0
+    if (setorText.isEmpty) {
+      SetorValue = 0;
+    } else {
+      SetorValue = double.parse(setorText);
+    }
+    
+    //total SUM
+    num total = calculateTotal();
+    updateTotalValue(total);
+  } catch (e) {
+    print('Invalid integer format');
+    // Handle the case where the text couldn't be parsed into an integer
+  }
+}
+
+void updateTotalValue(num total) {
+  num total = calculateTotal();
+  setState(() {
+    String formattedTotal = CurrencyFormat.convertToIdr(total.toInt(), 0);
+    HasilTextController.text = formattedTotal;
+    resultController.text = total.toString();
+  });
+}
+
+num calculateTotal() {
+  return AngsuranPokok + SetorValue;
+}
 
 
   @override
@@ -201,6 +240,7 @@ TextEditingController saldoController = TextEditingController();
                             ],
                           ),
                         ),
+
                       SizedBox(height: 16.h),
               Container(
                           padding: EdgeInsets.only(left: 16.w),
@@ -236,9 +276,9 @@ TextEditingController saldoController = TextEditingController();
                           color: Colors.grey[200],
                         ),
                         child: TextFormField(
-                        onChanged: (text) {
-                                  // savings_account_id = '1';
-                                },
+                            onChanged: (text) {
+                                    // savings_account_id = '1';
+                                  },
                           readOnly: false,
                           maxLines: null, // Set to null for a multi-line input
                           keyboardType: TextInputType.multiline,
