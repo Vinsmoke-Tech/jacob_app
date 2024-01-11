@@ -28,7 +28,7 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
   String printer_address = '';
   String printer_kitchen_address = '';
   String token = '';
-  String savings_cash_mutation_id = '';
+  String member_id = '';
   String start_date = DateTime.now().toString();
   String end_date = DateTime.now().toString();
   late FocusNode myFocusNode;
@@ -433,7 +433,7 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
     final prefs = await SharedPreferences.getInstance();
     showLoaderDialog(context);
     token = prefs.getString('token')!;
-    savings_cash_mutation_id = prefs.getString('savings_cash_mutation_id')!;
+    member_id = prefs.getString('member_id')!;
     try {
       Response response;
       var dio = Dio();
@@ -442,7 +442,7 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
         AppConstans.BASE_URL+AppConstans.MANDATORYPRINT,
         data: {
           'user_id': user_id == null ? null : user_id,
-          'savings_cash_mutation_id': savings_cash_mutation_id
+          'member_id': member_id
         },
         options: Options(contentType: Headers.jsonContentType),
       );
