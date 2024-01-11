@@ -151,7 +151,7 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['member']['member_name'],
+          text: salesinvoice['member_name'],
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -173,29 +173,7 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savingsaccount']['savings_account_no'],
-          width: 12,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-      ]),
-    );
-
-        printer.add(gen.feed(1));
-
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: "Jenis Simpanan :",
-          width: 12,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-      ]),
-    );
-
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: salesinvoice['savings']['savings_name'],
+          text: salesinvoice['member_no'],
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -207,7 +185,7 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: "Total Setor Tunai :",
+          text: "Total Setor :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -217,9 +195,9 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savings_cash_mutation_amount'] != 0
+          text: salesinvoice['member_mandatory_savings'] != 0
               ? CurrencyFormat.convertToIdrwithoutSymbol(
-              double.parse(salesinvoice['savings_cash_mutation_amount']), 2)
+              double.parse(salesinvoice['member_mandatory_savings']), 2)
               : "0",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
@@ -242,9 +220,9 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savingsaccount']['savings_account_last_balance'] != 0
+          text: salesinvoice['member_mandatory_savings_last_balance'] != 0
               ? CurrencyFormat.convertToIdrwithoutSymbol(
-              double.parse(salesinvoice['savingsaccount']['savings_account_last_balance']), 2)
+              double.parse(salesinvoice['member_mandatory_savings_last_balance']), 2)
               : "0",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
@@ -262,7 +240,9 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
           styles: PosStyles(align: PosAlign.left),
         ),
         PosColumn(
-          text:  salesinvoice['savings_cash_mutation_date'].toString(),
+          text:  (salesinvoice['updated_at'] != null
+                                      ? _formatDateTime(salesinvoice['updated_at'])
+                                      : 'Data Kosong'),
           styles: const PosStyles(bold: true, align: PosAlign.right),
           width: 6,
         ),
@@ -567,5 +547,17 @@ class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       callback();
     });
+  }
+      // Function to convert and format the DateTime
+  String _formatDateTime(String dateTimeString) {
+    try {
+      DateTime dateTime = DateTime.parse(dateTimeString);
+      // You can format the DateTime as needed using DateFormat or any other method
+      String formattedDateTime = "${dateTime.day}-${dateTime.month}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}";
+      return formattedDateTime;
+    } catch (e) {
+      print("Error parsing DateTime: $e");
+      return 'Invalid Date';
+    }
   }
 }
