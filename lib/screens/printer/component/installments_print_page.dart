@@ -141,6 +141,28 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
+          text: "No Transaksi :",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: salesinvoice['account']['credits_account_serial'],
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
           text: "Anggota :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
@@ -163,7 +185,7 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: "No Transaksi :",
+          text: "Angsuran Ke :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -173,7 +195,7 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['account']['credits_account_serial'],
+          text: salesinvoice['credits_payment_to'],
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
