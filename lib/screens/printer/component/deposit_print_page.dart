@@ -441,6 +441,7 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.DEPOSITPRINT,
         data: {
+          // ignore: unnecessary_null_comparison
           'user_id': user_id == null ? null : user_id,
           'savings_cash_mutation_id': savings_cash_mutation_id
         },
@@ -488,6 +489,7 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
         AppConstans.BASE_URL+AppConstans.PRINTER_ADDRESS,
+        // ignore: unnecessary_null_comparison
         data: {'user_id': user_id == null ? null : user_id},
         options: Options(contentType: Headers.jsonContentType),
       );

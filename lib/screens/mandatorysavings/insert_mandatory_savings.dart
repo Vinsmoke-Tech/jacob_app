@@ -243,7 +243,7 @@ calculateTotal() {
                             
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              labelText: 'No Anggota',
+                              labelText: 'No Identitas',
                               labelStyle: TextStyle(
                                   color: myFocusNodeFive.hasFocus
                                       ? Colors.black
