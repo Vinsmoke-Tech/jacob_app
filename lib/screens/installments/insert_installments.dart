@@ -82,8 +82,8 @@ TextEditingController HasilTextController = TextEditingController(text: 0.toStri
     obscureText = true;
     credits_account_id = widget.bySaving[widget.data].toString();
 
-    AngsuranPokok = double.parse(widget.bySaving['credits_account_principal_amount']);
     BungaValue = double.parse(widget.bySaving['credits_account_interest_amount']);
+    AngsuranPokok = double.parse(widget.bySaving['credits_account_principal_amount']);
     DendaValue = credits_payment_fine;
     LainValue = credits_others_income;
     WajibValue = member_mandatory_savings;
@@ -191,26 +191,25 @@ void onSimpWajibValueChanged() {
 }
 
 void onAngsuranValueChanged() {
-  // Update AngsuranPokok when the value in the text field changes
-  String angsuranText = angsuranController.text; // Remove commas before parsing
+   // Extract the numeric value from the string and parse it into an integer
+  String angsuranText = angsuranController.text; // Remove 'Rp' and commas
+  print('Extracted angsuranText: $angsuranText'); // Add this line to check the extracted text
 
-  print('Extracted wajibText: $angsuranText');
-  try{
+  try {
     //logic null then 0
     if(angsuranText.isEmpty){
-      AngsuranValue = 0;
+      AngsuranPokok = 0;
     }else{
-      AngsuranValue = double.parse(angsuranText);
+      AngsuranPokok = double.parse(angsuranText);
     }
-
+    
     //total SUM
     num total = calculateTotal();
     updateTotalValue(total);
-  }catch(e){
+  } catch (e) {
     print('Invalid integer format');
     // Handle the case where the text couldn't be parsed into an integer
   }
-
 }
 
 void updateTotalValue(num total) {
@@ -223,7 +222,7 @@ void updateTotalValue(num total) {
 }
 
 num calculateTotal() {
-  return AngsuranPokok + BungaValue + DendaValue + LainValue + WajibValue;
+  return BungaValue + AngsuranPokok + DendaValue + LainValue + WajibValue;
 }
 
 
@@ -325,7 +324,7 @@ num calculateTotal() {
                       color: Colors.grey[200],
                     ),
                     child: TextFormField(
-                      readOnly: false,
+                      readOnly: widget.bySaving['credits_id'] != 3, // Set readOnly conditionally
                       controller: angsuranController,
                       // initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_principal_amount']), 0).toString(),
                       keyboardType: TextInputType.number,
@@ -359,7 +358,7 @@ num calculateTotal() {
                       color: Colors.grey[200],
                     ),
                     child: TextFormField(
-                      readOnly: false,
+                      readOnly: true,
                       controller: bungaController,
                       // initialValue: CurrencyFormat.convertToIdr(double.parse(widget.bySaving['credits_account_interest_amount']), 0).toString(),
                       keyboardType: TextInputType.number,
@@ -498,7 +497,36 @@ num calculateTotal() {
                   ),
                 ),
               ),
-        
+
+              SizedBox(height: 16.h),
+
+              Container(
+                  padding: EdgeInsets.only(left: 16.w),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(25.r)),
+                    color: Colors.grey[200],
+                    
+                  ),
+                    child: TextFormField(
+                      controller: HasilTextController,
+                      readOnly: true,
+                      keyboardType: TextInputType.number,
+                                onChanged: (text) {
+                                    setState(() {
+                                    calculateTotal();
+                                  });
+                                },
+                                  
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: 'Total',
+                      labelStyle: TextStyle(
+                        color: myFocusNodeFive.hasFocus ? Colors.black : blue,
+                    ),
+                  ),
+                ),
+              ),
+              
               SizedBox(height: 16.h),
 
               ElevatedButton(

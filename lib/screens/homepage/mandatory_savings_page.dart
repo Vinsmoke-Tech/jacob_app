@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jacob_app/screens/serach_savings/search_mandatory_savings.dart';
-import 'package:jacob_app/screens/serach_savings/search_savings_withdraw.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
 import 'package:jacob_app/utility/app_constant.dart';
 import 'package:jacob_app/utility/currency_format.dart';
@@ -23,7 +22,7 @@ class _MandatorySavingsPageState extends State<MandatorySavingsPage> {
   String saving_id = '';
   String mutationamount = '';
   var savingsidJson = [];
-  var savings_cash_mutation_id ;
+  var member_id ;
 
 
 TextEditingController _controller = TextEditingController();
@@ -32,10 +31,12 @@ TextEditingController _controller = TextEditingController();
   void initState() {
     super.initState();
     loadSharedPreference();
-    savings_cash_mutation_id = 0;
-    fetchSaldo(context, savings_cash_mutation_id);
+    member_id = 0;
+    fetchSaldo(context, member_id);
     
   }
+
+  
 
   loadSharedPreference() async {
     final prefs = await SharedPreferences.getInstance();
@@ -48,10 +49,10 @@ TextEditingController _controller = TextEditingController();
   }
 
     Future<void> refresh()async{
-    fetchSaldo(context, savings_cash_mutation_id);
+    fetchSaldo(context, member_id);
   }
 
-    Future <void> fetchSaldo(BuildContext context, int savings_cash_mutation_id) async {
+    Future <void> fetchSaldo(BuildContext context, int member_id) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token')!;
@@ -60,10 +61,10 @@ TextEditingController _controller = TextEditingController();
       var dio = Dio();
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
-        AppConstans.BASE_URL+AppConstans.WITHDRAWMUTATION,
+        AppConstans.BASE_URL+AppConstans.LISTMANDATORYSAVINGS,
         data: {
           'user_id': user_id == null ? null : user_id,
-          'savings_cash_mutation_id':savings_cash_mutation_id == null ? null : savings_cash_mutation_id,
+          'member_id':member_id == null ? null : member_id,
         },
         options: Options(contentType: Headers.jsonContentType),
       );
@@ -147,7 +148,7 @@ TextEditingController _controller = TextEditingController();
                             },
                             child: ListTile(
                               title: Text(
-                                (savingsidJson[index]['member']['member_name'].toString()),
+                                (savingsidJson[index]['member_name'].toString()),
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   color: transparentBrown,
@@ -160,7 +161,9 @@ TextEditingController _controller = TextEditingController();
                                 children: [
                               
                                   Text(
-                                    (savingsidJson[index]['pickup_date'] ?? 'Data Kosong'),
+                                    (savingsidJson[index]['updated_at'] != null
+                                      ? _formatDateTime(savingsidJson[index]['updated_at'])
+                                      : 'Data Kosong'),
                                     style: TextStyle(
                                       fontSize: 12.sp,
                                       color: black,
@@ -171,7 +174,7 @@ TextEditingController _controller = TextEditingController();
                               ),
                               trailing: Text(
                                           CurrencyFormat.convertToIdr(
-                                            double.parse(savingsidJson[index]['savings_cash_mutation_amount'] ?? '0'),
+                                            double.parse(savingsidJson[index]['member_mandatory_savings_last_balance'] ?? '0'),
                                             2, // specify the number of decimal digits
                                             initialValue: 'Data Kosong',
                                           ),
@@ -200,7 +203,6 @@ TextEditingController _controller = TextEditingController();
   }
 
     Route _animatedRoute() {
-
       return PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => const SearchMandatorySavings(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -217,4 +219,17 @@ TextEditingController _controller = TextEditingController();
         },
       );
     }
+
+    // Function to convert and format the DateTime
+String _formatDateTime(String dateTimeString) {
+  try {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    // You can format the DateTime as needed using DateFormat or any other method
+    String formattedDateTime = "${dateTime.day}-${dateTime.month}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}";
+    return formattedDateTime;
+  } catch (e) {
+    print("Error parsing DateTime: $e");
+    return 'Invalid Date';
+  }
+}
 }

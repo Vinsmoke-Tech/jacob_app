@@ -27,6 +27,7 @@ class AppConstans {
 
   //SimpWajib
   static const String MANDATORYSAVINGS = "/api/processAddMemberSavings/";
+  static const String LISTMANDATORYSAVINGS = "/api/get-history-simpanan-wajib/";
   
   //ANGSURAN
   static const String GETDATACREDIT = "/api/getDataCredit";
@@ -34,9 +35,10 @@ class AppConstans {
   static const String PAYMENTCASH = "/api/processAddCreditsPaymentCash/";
   static const String LISTCREDIT = "/api/GetAngsuran";
 
-
-
+  //SETOR 
   static const String DEPOSITBYID = "/api/saving/deposit/";
+  
+  //TARIK 
   static const String WITHDRAWBYID = "/api/saving/withdraw/";
 
   // printer end points
