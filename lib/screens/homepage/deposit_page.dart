@@ -93,7 +93,7 @@ TextEditingController _controller = TextEditingController();
     }
   }
 
-    void printDeposit(BuildContext context, var savings_cash_mutation_id) async {
+  void printDeposit(BuildContext context, var savings_cash_mutation_id) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('savings_cash_mutation_id', savings_cash_mutation_id.toString());
