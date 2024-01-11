@@ -414,7 +414,17 @@ num calculateTotal() {
             context,
             MaterialPageRoute(builder: (context) =>  BottomNavBar(initialIndex: 0)), // Gantilah dengan nama halaman redirect yang sesuai
           );
-          // Navigator.pop(context);
+
+            //notif berhasil simpan
+            _onWidgetDidBuild(() {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Setor Tunai Berhasil di Simpan'),
+                backgroundColor: Color(0xff36E892),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          });
       } 
     } on DioError catch (e) {
       print(e);
@@ -449,4 +459,11 @@ num calculateTotal() {
       },
     );
   }
+
+  void _onWidgetDidBuild(Function callback) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      callback();
+    });
+  }
+
   }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jacob_app/screens/printer/component/installments_print_page.dart';
 import 'package:jacob_app/screens/serach_savings/search_installment.dart';
 import 'package:jacob_app/screens/serach_savings/search_savings_withdraw.dart';
 import 'package:jacob_app/screens/style/app_properties.dart';
@@ -92,6 +93,15 @@ TextEditingController _controller = TextEditingController();
     }
   }
 
+  void printAngsuran(BuildContext context, var credits_payment_id) async {
+    // Remove data for the 'counter' key.
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('credits_payment_id', credits_payment_id.toString());
+    //print status variabel local
+    prefs.setString('print_status', "0");
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => InstallmentsPrintPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +154,8 @@ TextEditingController _controller = TextEditingController();
                           GestureDetector(
                             onTap: () {
                               // Aksi yang ingin Anda lakukan saat ListTile ditekan
+                              printAngsuran(context,
+                              savingsidJson[index]['credits_payment_id']);
                             },
                             child: ListTile(
                               title: Text(

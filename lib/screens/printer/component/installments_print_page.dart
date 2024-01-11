@@ -28,7 +28,7 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
   String printer_address = '';
   String printer_kitchen_address = '';
   String token = '';
-  String savings_cash_mutation_id = '';
+  String credits_payment_id = '';
   String start_date = DateTime.now().toString();
   String end_date = DateTime.now().toString();
   late FocusNode myFocusNode;
@@ -113,7 +113,7 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
     final gen = Generator(PaperSize.mm58, await CapabilityProfile.load());
     final printer = BluePrint();
     // print(navbar_index);
-    await PrintGetWithdraw(context);
+    await PrintAngsuran(context);
     // printer.add(gen.qrcode('www.ciptasolutindo.id'));
     printer.add(
       gen.text(
@@ -158,12 +158,59 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
       ]),
     );
 
+    printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: "No Transaksi :",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: salesinvoice['account']['credits_account_serial'],
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: "Angsuran Pokok :",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: salesinvoice['credits_payment_principal'] != 0
+              ? CurrencyFormat.convertToIdrwithoutSymbol(
+              double.parse(salesinvoice['credits_payment_principal']), 2)
+              : "0",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
         printer.add(gen.feed(1));
 
     printer.add(
       gen.row([
         PosColumn(
-          text: "Jenis Simpanan :",
+          text: "Angsuran Bunga :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -173,31 +220,9 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: salesinvoice['savings']['savings_name'],
-          width: 12,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-      ]),
-    );
-
-    printer.add(gen.feed(1));
-
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: "Total Tarik Tunai :",
-          width: 12,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-      ]),
-    );
-
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: salesinvoice['savings_cash_mutation_amount'] != 0
+          text: salesinvoice['credits_payment_interest'] != 0
               ? CurrencyFormat.convertToIdrwithoutSymbol(
-              double.parse(salesinvoice['savings_cash_mutation_amount']), 2)
+              double.parse(salesinvoice['credits_payment_interest']), 2)
               : "0",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
@@ -205,30 +230,6 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
       ]),
     );
 
-    printer.add(gen.feed(1));
-
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: "Saldo :",
-          width: 12,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-      ]),
-    );
-
-    printer.add(
-      gen.row([
-        PosColumn(
-          text: salesinvoice['savingsaccount']['savings_account_last_balance'] != 0
-              ? CurrencyFormat.convertToIdrwithoutSymbol(
-              double.parse(salesinvoice['savingsaccount']['savings_account_last_balance']), 2)
-              : "0",
-          width: 12,
-          styles: PosStyles(align: PosAlign.left),
-        ),
-      ]),
-    );
 
       printer.add(gen.feed(1));
 
@@ -240,7 +241,7 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
           styles: PosStyles(align: PosAlign.left),
         ),
         PosColumn(
-          text:  salesinvoice['savings_cash_mutation_date'].toString(),
+          text:  salesinvoice['credits_payment_date'].toString(),
           styles: const PosStyles(bold: true, align: PosAlign.right),
           width: 6,
         ),
@@ -406,21 +407,21 @@ class _InstallmentsPrintPageState extends State<InstallmentsPrintPage> {
     );
   }
 
-  Future<void> PrintGetWithdraw(BuildContext context) async {
+  Future<void> PrintAngsuran(BuildContext context) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     showLoaderDialog(context);
     token = prefs.getString('token')!;
-    savings_cash_mutation_id = prefs.getString('savings_cash_mutation_id')!;
+    credits_payment_id = prefs.getString('credits_payment_id')!;
     try {
       Response response;
       var dio = Dio();
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
-        AppConstans.BASE_URL+AppConstans.WITHDRAWPRINT,
+        AppConstans.BASE_URL+AppConstans.ANGSURANPRINT,
         data: {
           'user_id': user_id == null ? null : user_id,
-          'savings_cash_mutation_id': savings_cash_mutation_id
+          'credits_payment_id': credits_payment_id
         },
         options: Options(contentType: Headers.jsonContentType),
       );

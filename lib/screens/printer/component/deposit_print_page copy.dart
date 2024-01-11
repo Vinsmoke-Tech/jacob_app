@@ -14,14 +14,14 @@ import '../../../utility/currency_format.dart';
 import '../../../widget/custom_loading.dart';
 import 'no_printer_page.dart';
 
-class WithdrawPrintPage extends StatefulWidget {
-  const WithdrawPrintPage({super.key});
+class MandatoryPrintPage extends StatefulWidget {
+  const MandatoryPrintPage({super.key});
 
   @override
-  State<WithdrawPrintPage> createState() => _WithdrawPrintPageState();
+  State<MandatoryPrintPage> createState() => _MandatoryPrintPageState();
 }
 
-class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
+class _MandatoryPrintPageState extends State<MandatoryPrintPage> {
   String username = '';
   String user_id = '';
   String user_group_name = '';
@@ -113,7 +113,7 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
     final gen = Generator(PaperSize.mm58, await CapabilityProfile.load());
     final printer = BluePrint();
     // print(navbar_index);
-    await PrintGetWithdraw(context);
+    await getSalesPrintData(context);
     // printer.add(gen.qrcode('www.ciptasolutindo.id'));
     printer.add(
       gen.text(
@@ -207,7 +207,7 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
     printer.add(
       gen.row([
         PosColumn(
-          text: "Total Tarik Tunai :",
+          text: "Total Setor Tunai :",
           width: 12,
           styles: PosStyles(align: PosAlign.left),
         ),
@@ -428,7 +428,7 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
     );
   }
 
-  Future<void> PrintGetWithdraw(BuildContext context) async {
+  Future<void> getSalesPrintData(BuildContext context) async {
     // Remove data for the 'counter' key.
     final prefs = await SharedPreferences.getInstance();
     showLoaderDialog(context);
@@ -439,7 +439,7 @@ class _WithdrawPrintPageState extends State<WithdrawPrintPage> {
       var dio = Dio();
       dio.options.headers["authorization"] = "Bearer ${token}";
       response = await dio.post(
-        AppConstans.BASE_URL+AppConstans.WITHDRAWPRINT,
+        AppConstans.BASE_URL+AppConstans.MANDATORYPRINT,
         data: {
           'user_id': user_id == null ? null : user_id,
           'savings_cash_mutation_id': savings_cash_mutation_id

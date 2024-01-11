@@ -45,6 +45,7 @@ class AppConstans {
   static const String DEPOSITPRINT = "/api/print-deposit";
   static const String WITHDRAWPRINT = "/api/print-withdraw";
   static const String ANGSURANPRINT = "/api/print-credits-payment";
+  static const String MANDATORYPRINT = "/api/print-member-savings";
 
 
 

@@ -158,6 +158,28 @@ class _DepositPrintPageState extends State<DepositPrintPage> {
       ]),
     );
 
+    printer.add(gen.feed(1));
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: "No Tabungan:",
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
+    printer.add(
+      gen.row([
+        PosColumn(
+          text: salesinvoice['savingsaccount']['savings_account_no'],
+          width: 12,
+          styles: PosStyles(align: PosAlign.left),
+        ),
+      ]),
+    );
+
         printer.add(gen.feed(1));
 
     printer.add(

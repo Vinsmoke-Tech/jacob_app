@@ -431,15 +431,22 @@ num calculateTotal() {
       // Check the response status code
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Successful response
-
          // Redirect to a new page
-        
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) =>  BottomNavBar(initialIndex: 1)), // Gantilah dengan nama halaman redirect yang sesuai
           );
-          
-          // Navigator.pop(context);
+
+            //notif berhasil simpan
+            _onWidgetDidBuild(() {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tarik Tunai Berhasil di Simpan'),
+                backgroundColor: Color(0xff36E892),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          });
       } 
     } on DioError catch (e) {
       print(e);
@@ -481,4 +488,10 @@ num calculateTotal() {
       },
     );
   }
+
+  void _onWidgetDidBuild(Function callback) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      callback();
+    });
   }
+}
